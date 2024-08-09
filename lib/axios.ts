@@ -1,0 +1,23 @@
+import axios from "axios";
+
+export const api = axios.create({
+  withCredentials: true,
+  baseURL:
+    typeof window === "undefined"
+      ? process.env.API_URL
+      : process.env.NEXT_PUBLIC_API_URL,
+});
+api.interceptors.request.use((request) => {
+  return request;
+});
+api.interceptors.response.use(
+  (response) => {
+    return response.data;
+  },
+  (error) => {
+    if (error) {
+      console.log(error);
+      return Promise.reject(error);
+    }
+  }
+);
