@@ -31,26 +31,20 @@ export const GetAdminProjectSchema = z.object({
 export type GetAdminProjectDto = z.infer<typeof GetAdminProjectSchema>;
 
 // LoginAdminDto
-export const LoginAdminSchema = z
-  .object({
-    email: z.string().email("Invalid email format"),
-    password: z
-      .string({
-        invalid_type_error: "Password must be a string",
-        required_error: "Password not provided.",
-      })
-      .min(6, "Password must be at least 6 characters")
-      .max(100, "Password cannot exceed 100 characters"),
-    confirmPassword: z.string(),
-    // .refine((val) => /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])/.test(val), {
-    //   message:
-    //     'Password must contain at least one letter, one number, and one special character',
-    // }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+export const LoginAdminSchema = z.object({
+  email: z.string().email("Invalid email format"),
+  password: z
+    .string({
+      invalid_type_error: "Password must be a string",
+      required_error: "Password not provided.",
+    })
+    .min(6, "Password must be at least 6 characters")
+    .max(100, "Password cannot exceed 100 characters"),
+  // .refine((val) => /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])/.test(val), {
+  //   message:
+  //     'Password must contain at least one letter, one number, and one special character',
+  // }),
+});
 
 export type LoginAdminDto = z.infer<typeof LoginAdminSchema>;
 

@@ -1,3 +1,4 @@
+"use client";
 import {
   Form,
   FormControl,
@@ -15,7 +16,7 @@ const LoginPage = () => {
   return (
     <div>
       <Form {...form}>
-        <form>
+        <form onSubmit={form.handleSubmit(submitLoginAdminForm)}>
           <FormField
             control={form.control}
             name="email"
@@ -46,25 +47,8 @@ const LoginPage = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem className="mb-4">
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl className="">
-                  <Input
-                    placeholder="6 characters minimum"
-                    {...field}
-                    type="password"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <Button className="w-full mt-10" type="submit">
-            Register
+            Log In
           </Button>
         </form>
       </Form>
