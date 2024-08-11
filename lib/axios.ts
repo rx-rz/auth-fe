@@ -8,7 +8,6 @@ export const api = axios.create({
       : process.env.NEXT_PUBLIC_API_URL,
 });
 api.interceptors.request.use((request) => {
-  console.log({ request });
   return request;
 });
 api.interceptors.response.use(

@@ -3,4 +3,11 @@ export type RegisterAdminResponse = {
   success: boolean;
 };
 
-export type LoginAdminReponse = RegisterAdminResponse;
+export type LoginAdminReponse = RegisterAdminResponse & { accessToken: string };
+
+export type GetChallengeResponse = {
+  success: string;
+  challenge: string;
+};
+
+export type VerifyChallengeResponse = RegisterAdminResponse;
