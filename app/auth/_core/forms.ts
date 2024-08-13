@@ -1,3 +1,4 @@
+import { startRegistration } from "@simplewebauthn/browser";
 import {
   LoginAdminDto,
   LoginAdminSchema,
@@ -6,12 +7,16 @@ import {
 } from "@/schemas/admin.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { getChallenge, loginAdmin, registerAdmin, sendWebAuthnCredentialsToServer } from "./actions";
+import {
+  getMfaRegistrationOptions,
+  loginAdmin,
+  registerAdmin,
+  verifyMfaRegistrationOptions,
+} from "./actions";
 import { useRouter } from "next/navigation";
-import { client } from "@passwordless-id/webauthn";
 import { decodeUserToken, User } from "@/lib/utils";
 import { useUserStore } from "@/store/user.store";
-import { VerifyChallengeDto } from "@/schemas/mfa.schemas";
+import { RegistrationResponseJSON } from "@simplewebauthn/types";
 export const useRegister = () => {
   const router = useRouter();
   const registerAdminForm = useForm<RegisterAdminDto>({
@@ -31,7 +36,6 @@ export const useRegister = () => {
       router.push("/");
     }
   }
-
   return { registerAdminForm, submitRegisterAdminForm };
 };
 
@@ -48,9 +52,6 @@ export const useLogin = () => {
       const user: User | undefined = decodeUserToken(response.accessToken);
       if (user && user.mfaEnabled === false) {
         setUser(user);
-        const { response } = await getChallenge();
-        if (response?.success)
-          sessionStorage.setItem("challenge", response.challenge);
         router.push("/auth/mfa");
       } else {
         router.push("/");
@@ -66,12 +67,18 @@ export const useMFA = () => {
   const { user } = useUserStore();
   async function triggerWebMFARegistration() {
     if (user) {
-      const registration = await client.register({
-        user: user.id || "",
-        challenge: sessionStorage.getItem("challenge") ?? "",
-        timeout: 60,
-      });
-
+      const { response, error } = await getMfaRegistrationOptions(
+        user.email ?? ""
+      );
+      if (error) throw Error("Error");
+      if (response?.success) {
+        const registrationResponse = await startRegistration(response.options);
+        const a = await verifyMfaRegistrationOptions({
+          email: user.email ?? "",
+          options: registrationResponse,
+          webAuthnUserId: response.options.user.id,
+        });
+      }
     }
   }
   return { triggerWebMFARegistration };

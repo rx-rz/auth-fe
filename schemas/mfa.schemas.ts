@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const VerifyChallengeSchema = z.object({
+export const GetWebAuthnCredentialsSchema = z.object({
   username: z.string().min(1, { message: "Username cannot be empty" }),
   credential: z.object(
     {
@@ -21,4 +21,42 @@ export const VerifyChallengeSchema = z.object({
   attestationData: z.string().optional(),
 });
 
-export type VerifyChallengeDto = z.infer<typeof VerifyChallengeSchema>;
+export type GetWebAuthnCredentialsDto = z.infer<
+  typeof GetWebAuthnCredentialsSchema
+>;
+
+export const VerifyMfaRegistrationSchema = z.object({
+  email: z.string().email(),
+  options: z.object({
+    id: z.string(),
+    rawId: z.string(),
+    response: z.object({
+      attestationObject: z.string(),
+      clientDataJSON: z.string(),
+      transports: z.array(z.string()),
+      publicKeyAlgorithm: z.string(),
+      publicKey: z.string(),
+      authenticatorData: z.string(),
+    }),
+
+    clientExtensionResults: z.object({
+      credProps: z.object({
+        rk: z.boolean(),
+      }),
+    }),
+    authenticatorAttachment: z.string(),
+    type: z.string(),
+  }),
+});
+
+export type VerifyMfaRegistrationDto = z.infer<
+  typeof VerifyMfaRegistrationSchema
+>;
+
+export const EmailSchema = z.object({
+  email: z
+    .string({ required_error: "Email required" })
+    .email({ message: "Invalid email provided" }),
+});
+
+export type EmailDto = z.infer<typeof EmailSchema>;
