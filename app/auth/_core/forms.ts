@@ -1,4 +1,7 @@
-import { startRegistration } from "@simplewebauthn/browser";
+import {
+  startAuthentication,
+  startRegistration,
+} from "@simplewebauthn/browser";
 import {
   LoginAdminDto,
   LoginAdminSchema,
@@ -8,15 +11,16 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
+  getMfaAuthenticationOptions,
   getMfaRegistrationOptions,
   loginAdmin,
   registerAdmin,
+  verifyMfaAuthenticationOptions,
   verifyMfaRegistrationOptions,
 } from "./actions";
 import { useRouter } from "next/navigation";
 import { decodeUserToken, User } from "@/lib/utils";
 import { useUserStore } from "@/store/user.store";
-import { RegistrationResponseJSON } from "@simplewebauthn/types";
 export const useRegister = () => {
   const router = useRouter();
   const registerAdminForm = useForm<RegisterAdminDto>({
@@ -50,11 +54,9 @@ export const useLogin = () => {
     const { response, error } = await loginAdmin(values);
     if (response && response.success) {
       const user: User | undefined = decodeUserToken(response.accessToken);
-      if (user && user.mfaEnabled === false) {
+      if (user) {
         setUser(user);
         router.push("/auth/mfa");
-      } else {
-        router.push("/");
       }
     }
     console.log(error);
@@ -64,7 +66,8 @@ export const useLogin = () => {
 };
 
 export const useMFA = () => {
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
+  const router = useRouter();
   async function triggerWebMFARegistration() {
     if (user) {
       const { response, error } = await getMfaRegistrationOptions(
@@ -73,13 +76,40 @@ export const useMFA = () => {
       if (error) throw Error("Error");
       if (response?.success) {
         const registrationResponse = await startRegistration(response.options);
-        const a = await verifyMfaRegistrationOptions({
-          email: user.email ?? "",
-          options: registrationResponse,
-          webAuthnUserId: response.options.user.id,
-        });
+        const { response: verificationResponse, error } =
+          await verifyMfaRegistrationOptions({
+            email: user.email ?? "",
+            options: registrationResponse,
+            webAuthnUserId: response.options.user.id,
+          });
+        if (verificationResponse?.success) {
+          setUser({ ...user, mfaEnabled: true });
+          router.push("/");
+        }
       }
     }
   }
-  return { triggerWebMFARegistration };
+
+  async function triggerWebMFAAuthentication() {
+    if (user) {
+      const { response, error } = await getMfaAuthenticationOptions(
+        user.email ?? ""
+      );
+      if (error) throw Error("Error");
+      if (response?.success) {
+        const authenticationResponse = await startAuthentication(
+          response.options
+        );
+        const { response: verificationResponse } =
+          await verifyMfaAuthenticationOptions({
+            email: user.email ?? "",
+            options: authenticationResponse,
+          });
+        if (verificationResponse?.success) {
+          router.push("/");
+        }
+      }
+    }
+  }
+  return { triggerWebMFARegistration, triggerWebMFAAuthentication };
 };

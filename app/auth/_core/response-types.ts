@@ -5,8 +5,6 @@ export type RegisterAdminResponse = {
 
 export type LoginAdminReponse = RegisterAdminResponse & { accessToken: string };
 
-
-
 export type GetMfaRegistrationOptionsResponse = {
   options: {
     challenge: string;
@@ -40,3 +38,20 @@ export type GetMfaRegistrationOptionsResponse = {
 };
 
 export type VerifyMfaRegistrationResponse = RegisterAdminResponse;
+
+export type GetMfaAuthenticationOptionsResponse = {
+  options: {
+    rpId: string;
+    challenge: string;
+    allowCredentials: {
+      id: string;
+      transports: ("internal" | "nfc" | "ble" | "usb")[];
+      type: "public-key";
+    }[];
+    timeout: number;
+    userVerification: "preferred" | "required" | "discouraged";
+  };
+  success: boolean;
+};
+
+export type VerifyMfaAuthenticationResponse = RegisterAdminResponse;

@@ -1,15 +1,21 @@
 import { api } from "@/lib/axios";
 import { LoginAdminDto, RegisterAdminDto } from "@/schemas/admin.schemas";
 import {
+  GetMfaAuthenticationOptionsResponse,
   GetMfaRegistrationOptionsResponse,
   LoginAdminReponse,
   RegisterAdminResponse,
+  VerifyMfaAuthenticationResponse,
+  VerifyMfaRegistrationResponse,
 } from "./response-types";
 import {
   GetWebAuthnCredentialsDto,
   VerifyMfaRegistrationDto,
 } from "@/schemas/mfa.schemas";
-import { RegistrationResponseJSON } from "@simplewebauthn/types";
+import {
+  AuthenticationResponseJSON,
+  RegistrationResponseJSON,
+} from "@simplewebauthn/types";
 
 export async function registerAdmin(body: RegisterAdminDto) {
   const { confirmPassword, ...data } = body;
@@ -57,11 +63,42 @@ export async function verifyMfaRegistrationOptions({
   webAuthnUserId: string;
 }) {
   let error;
-  let response: VerifyMfaRegistrationDto | undefined;
+  let response: VerifyMfaRegistrationResponse | undefined;
   const body = { email, options, webAuthnUserId };
 
   try {
     response = await api.post("/mfa/verify-registration-options", body);
+  } catch (err) {
+    if (err instanceof Error) error = err;
+  }
+  return { error, response };
+}
+
+export async function getMfaAuthenticationOptions(email: string) {
+  let error;
+  let response: GetMfaAuthenticationOptionsResponse | undefined;
+  try {
+    response = await api.get("/mfa/get-authentication-options", {
+      params: { email },
+    });
+  } catch (err) {
+    if (err instanceof Error) error = err;
+  }
+  return { error, response };
+}
+
+export async function verifyMfaAuthenticationOptions({
+  email,
+  options,
+}: {
+  email: string;
+  options: AuthenticationResponseJSON;
+}) {
+  let error;
+  let response: VerifyMfaAuthenticationResponse | undefined;
+  const body = { email, ...options };
+  try {
+    response = await api.post("/mfa/verify-authentication-options", body);
   } catch (err) {
     if (err instanceof Error) error = err;
   }
