@@ -21,8 +21,12 @@ import {
 import { useRouter } from "next/navigation";
 import { decodeUserToken, User } from "@/lib/utils";
 import { useUserStore } from "@/store/user.store";
+import { AxiosError } from "axios";
+import { useToast } from "@/components/ui/use-toast";
+
 export const useRegister = () => {
   const router = useRouter();
+  const { toast } = useToast();
   const registerAdminForm = useForm<RegisterAdminDto>({
     resolver: zodResolver(RegisterAdminSchema),
     defaultValues: {
@@ -35,9 +39,21 @@ export const useRegister = () => {
   });
 
   async function submitRegisterAdminForm(values: RegisterAdminDto) {
-    const { response, error } = await registerAdmin(values);
+    const { error, response } = await registerAdmin(values);
     if (response && response.success) {
       router.push("/");
+    }
+    if (error) {
+      if (error instanceof AxiosError) {
+        toast({
+          variant: "destructive",
+          title: error.response?.data.message.error,
+          description: error.response?.data.message.message,
+          style: {
+            padding: ".5em",
+          },
+        });
+      }
     }
   }
   return { registerAdminForm, submitRegisterAdminForm };

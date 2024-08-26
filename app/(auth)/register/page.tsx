@@ -10,20 +10,28 @@ import {
 import { useRegister } from "../_core/forms";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
 const RegisterPage = () => {
   const { registerAdminForm: form, submitRegisterAdminForm } = useRegister();
+
   return (
-    <div>
+    <div className="flex w-full flex-wrap h-screen border justify-between">
+      <div className=" w-3/5 p-5">
+        <div className="w-full h-full bg-black"></div>
+      </div>
       <Form {...form}>
         <form
-          className="w-4/12 mx-auto mt-10"
           onSubmit={form.handleSubmit(submitRegisterAdminForm)}
+          className="mx-auto mt-24 w-[90%] max-w-[400px] font-satoshi"
         >
+          <div className="mx-auto w-fit">
+            <Logo />
+          </div>
           <FormField
             control={form.control}
             name="firstName"
             render={({ field }) => (
-              <FormItem className="mb-4">
+              <FormItem className="mb-4 mt-16">
                 <FormLabel>First Name</FormLabel>
                 <FormControl className="">
                   <Input placeholder="John" {...field} />
@@ -36,7 +44,7 @@ const RegisterPage = () => {
             control={form.control}
             name="lastName"
             render={({ field }) => (
-              <FormItem className="mb-4"> 
+              <FormItem className="mb-4">
                 <FormLabel>Last Name</FormLabel>
                 <FormControl className="">
                   <Input placeholder="Doe" {...field} />
