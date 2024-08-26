@@ -11,101 +11,105 @@ import { useRegister } from "../_core/forms";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { MoreHorizontal } from "lucide-react";
 const RegisterPage = () => {
-  const { registerAdminForm: form, submitRegisterAdminForm } = useRegister();
+  const {
+    registerAdminForm: form,
+    submitRegisterAdminForm,
+    loading,
+  } = useRegister();
 
   return (
-    <div className="flex w-full flex-wrap h-screen border justify-between">
-      <div className=" w-3/5 p-5">
-        <div className="w-full h-full bg-black"></div>
-      </div>
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(submitRegisterAdminForm)}
-          className="mx-auto mt-24 w-[90%] max-w-[400px] font-satoshi"
-        >
-          <div className="mx-auto w-fit">
-            <Logo />
-          </div>
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem className="mb-4 mt-16">
-                <FormLabel>First Name</FormLabel>
-                <FormControl className="">
-                  <Input placeholder="John" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem className="mb-4">
-                <FormLabel>Last Name</FormLabel>
-                <FormControl className="">
-                  <Input placeholder="Doe" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem className="mb-4">
-                <FormLabel>Email</FormLabel>
-                <FormControl className="">
-                  <Input placeholder="ade@gmail.com" {...field} type="email" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="mb-4">
-                <FormLabel>Password</FormLabel>
-                <FormControl className="">
-                  <Input
-                    placeholder="6 characters minimum"
-                    {...field}
-                    type="password"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem className="mb-4">
-                <FormLabel>Confirm Password</FormLabel>
-                <FormControl className="">
-                  <Input
-                    placeholder="6 characters minimum"
-                    {...field}
-                    type="password"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button className="w-full mt-10" type="submit">
-            Register
-          </Button>
-        </form>
-      </Form>
-    </div>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(submitRegisterAdminForm)}
+        className="mx-auto mt-24 w-[90%] max-w-[400px] font-satoshi"
+      >
+        <div className="mx-auto w-fit">
+          <Logo />
+        </div>
+        <FormField
+          control={form.control}
+          name="firstName"
+          render={({ field }) => (
+            <FormItem className="mb-4 mt-16">
+              <FormLabel>First Name</FormLabel>
+              <FormControl className="">
+                <Input placeholder="John" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem className="mb-4">
+              <FormLabel>Last Name</FormLabel>
+              <FormControl className="">
+                <Input placeholder="Doe" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem className="mb-4">
+              <FormLabel>Email</FormLabel>
+              <FormControl className="">
+                <Input placeholder="ade@gmail.com" {...field} type="email" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem className="mb-4">
+              <FormLabel>Password</FormLabel>
+              <FormControl className="">
+                <Input
+                  placeholder="6 characters minimum"
+                  {...field}
+                  type="password"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem className="mb-4">
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl className="">
+                <Input
+                  placeholder="6 characters minimum"
+                  {...field}
+                  type="password"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button className="w-full mt-10" type="submit">
+          {loading ? (
+            <MoreHorizontal size={20} className="animate-bounce" />
+          ) : (
+            "Register"
+          )}
+        </Button>
+      </form>
+    </Form>
   );
 };
 
