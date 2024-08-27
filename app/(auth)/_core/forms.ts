@@ -21,7 +21,7 @@ import {
 import { useRouter } from "next/navigation";
 import { decodeUserToken, User } from "@/lib/utils";
 import { useUserStore } from "@/store/user.store";
-import { Axios, AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { ROUTES } from "@/lib/routes";
@@ -130,7 +130,7 @@ export const useMFA = () => {
           });
         if (verificationResponse?.success) {
           setUser({ ...user, mfaEnabled: true });
-          router.push("/");
+          router.push(ROUTES.PROJECTS);
         }
         if (error) {
           if (error instanceof AxiosError) {
@@ -173,7 +173,7 @@ export const useMFA = () => {
             options: authenticationResponse,
           });
         if (verificationResponse?.success) {
-          router.push("/");
+          router.push(ROUTES.PROFILE);
         }
         if (error) {
           if (error) {

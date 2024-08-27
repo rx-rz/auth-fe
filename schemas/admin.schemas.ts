@@ -175,3 +175,5 @@ export const UpdateAdminPasswordSchema = z.object({
 });
 
 export type UpdateAdminPasswordDto = z.infer<typeof UpdateAdminPasswordSchema>;
+
+

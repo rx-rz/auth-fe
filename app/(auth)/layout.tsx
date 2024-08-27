@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex w-full flex-wrap h-screen border justify-between">
+    <div className="flex w-full flex-wrap h-screen border justify-between font-satoshi">
       <div className="md:block hidden w-3/5 p-5">
         <div className="w-full h-full flex items-center justify-center bg-black relative">
           <video autoPlay loop playsInline muted>

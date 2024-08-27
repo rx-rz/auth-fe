@@ -11,6 +11,8 @@ import { useLogin } from "../_core/forms";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { ROUTES } from "@/lib/routes";
+import Link from "next/link";
 
 const LoginPage = () => {
   const { loginAdminForm: form, submitLoginAdminForm } = useLogin();
@@ -62,6 +64,12 @@ const LoginPage = () => {
           Log In
         </Button>
       </form>
+      <p className="text-center mt-2 text-sm">
+        Don't have an account? Please{" "}
+        <Link href={ROUTES.REGISTER} className="underline underline-offset-2">
+          register.
+        </Link>
+      </p>
     </Form>
   );
 };

@@ -19,17 +19,14 @@ import {
 
 export async function registerAdmin(body: RegisterAdminDto) {
   const { confirmPassword, ...data } = body;
-  let loading = false;
   let error;
   let response: RegisterAdminResponse | undefined;
   try {
-    loading = true;
     response = await api.post("/admin/register", data);
   } catch (err) {
     if (err instanceof Error) error = err;
   }
-  loading = false;
-  return { error, loading, response };
+  return { error, response };
 }
 
 export async function loginAdmin(body: LoginAdminDto) {

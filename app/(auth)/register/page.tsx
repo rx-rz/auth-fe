@@ -12,6 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import { MoreHorizontal } from "lucide-react";
+import Link from "next/link";
+import { ROUTES } from "@/lib/routes";
 const RegisterPage = () => {
   const {
     registerAdminForm: form,
@@ -109,6 +111,9 @@ const RegisterPage = () => {
           )}
         </Button>
       </form>
+      <p className="text-center mt-2 text-sm">
+        Already registered? Please <Link href={ROUTES.LOGIN} className="underline underline-offset-2">login.</Link>
+      </p>
     </Form>
   );
 };
