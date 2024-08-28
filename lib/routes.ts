@@ -4,9 +4,9 @@ export const ROUTES = {
   MFA: "/mfa",
   PROFILE: '/profile',
   FORGOT_PASSWORD: "/forgot-password",
-  UPDATE_EMAIL: "/update-email",
-  UPDATE_PASSWORD: "/update-password",
-  UPDATE_DETAILS: "/update-admin-details",
-  DELETE_ACCOUNT: "/delete-account",
+  UPDATE_EMAIL: "/profile/update-email",
+  UPDATE_PASSWORD: "/profile/update-password",
+  UPDATE_DETAILS: "/profile/update-details",
+  DELETE_ACCOUNT: "/profile/delete-account",
   PROJECTS: '/projects'
 };

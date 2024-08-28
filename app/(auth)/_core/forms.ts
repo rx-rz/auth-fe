@@ -21,7 +21,6 @@ import {
 import { useRouter } from "next/navigation";
 import { decodeUserToken, User } from "@/lib/utils";
 import { useUserStore } from "@/store/user.store";
-import { AxiosError } from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { ROUTES } from "@/lib/routes";
@@ -46,19 +45,15 @@ export const useRegister = () => {
     const { error, response } = await registerAdmin(values);
     if (response && response.success) {
       toast({
-        title: "Success",
-        description: "Admin registered successfully",
+        title: "Admin registered successfully",
       });
       router.push(ROUTES.LOGIN);
     }
     if (error) {
-      if (error instanceof AxiosError) {
-        toast({
-          variant: "destructive",
-          title: error.response?.data.message.error,
-          description: error.response?.data.message.message,
-        });
-      }
+      toast({
+        variant: "destructive",
+        title: error?.error,
+      });
     }
     setLoading(false);
   }
@@ -82,22 +77,22 @@ export const useLogin = () => {
       const user: User | undefined = decodeUserToken(response.accessToken);
       if (user) {
         setUser(user);
+        toast({
+          title: "Login successful",
+        });
         router.push(ROUTES.MFA);
       }
     }
     if (error) {
-      if (error instanceof AxiosError) {
-        toast({
-          variant: "destructive",
-          title: error.response?.data.message.error,
-          description: error.response?.data.message.message,
-        });
-      }
+      toast({
+        variant: "destructive",
+        title: error?.error,
+      });
     }
     setLoading(false);
   }
 
-  return { loginAdminForm, submitLoginAdminForm };
+  return { loginAdminForm, loading, submitLoginAdminForm };
 };
 
 export const useMFA = () => {
@@ -112,13 +107,10 @@ export const useMFA = () => {
         user.email ?? ""
       );
       if (error) {
-        if (error instanceof AxiosError) {
-          toast({
-            variant: "destructive",
-            title: error.response?.data.message.error,
-            description: error.response?.data.message.message,
-          });
-        }
+        toast({
+          variant: "destructive",
+          title: error?.error,
+        });
       }
       if (response?.success) {
         const registrationResponse = await startRegistration(response.options);
@@ -129,17 +121,17 @@ export const useMFA = () => {
             webAuthnUserId: response.options.user.id,
           });
         if (verificationResponse?.success) {
+          toast({
+            title: "Passkey registration successful",
+          });
           setUser({ ...user, mfaEnabled: true });
           router.push(ROUTES.PROJECTS);
         }
         if (error) {
-          if (error instanceof AxiosError) {
-            toast({
-              variant: "destructive",
-              title: error.response?.data.message.error,
-              description: error.response?.data.message.message,
-            });
-          }
+          toast({
+            variant: "destructive",
+            title: error?.error,
+          });
         }
       }
     }
@@ -154,13 +146,10 @@ export const useMFA = () => {
       );
       if (error) {
         if (error) {
-          if (error instanceof AxiosError) {
-            toast({
-              variant: "destructive",
-              title: error.response?.data.message.error,
-              description: error.response?.data.message.message,
-            });
-          }
+          toast({
+            variant: "destructive",
+            title: error?.error,
+          });
         }
       }
       if (response?.success) {
@@ -173,18 +162,16 @@ export const useMFA = () => {
             options: authenticationResponse,
           });
         if (verificationResponse?.success) {
+          toast({
+            title: "Passkey verification successful",
+          });
           router.push(ROUTES.PROFILE);
         }
         if (error) {
-          if (error) {
-            if (error instanceof AxiosError) {
-              toast({
-                variant: "destructive",
-                title: error.response?.data.message.error,
-                description: error.response?.data.message.message,
-              });
-            }
-          }
+          toast({
+            variant: "destructive",
+            title: error?.error,
+          });
         }
       }
     }

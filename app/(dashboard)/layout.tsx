@@ -6,7 +6,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
     <div className="h-screen font-satoshi">
       <div className="overflow-hidden h-full flex">
         <Sidebar />
-        <div className="p-4 h-screen overflow-y-scroll pb-48 flex-1">{children}</div>
+        <div className="p-5 ml-5 h-screen overflow-y-scroll pb-48 flex-1 mt-1">{children}</div>
       </div>
     </div>
   );

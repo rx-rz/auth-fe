@@ -15,7 +15,7 @@ import { ROUTES } from "@/lib/routes";
 import Link from "next/link";
 
 const LoginPage = () => {
-  const { loginAdminForm: form, submitLoginAdminForm } = useLogin();
+  const { loginAdminForm: form, loading, submitLoginAdminForm } = useLogin();
   return (
     <Form {...form}>
       <form

@@ -9,13 +9,10 @@ import {
   VerifyMfaRegistrationResponse,
 } from "./response-types";
 import {
-  GetWebAuthnCredentialsDto,
-  VerifyMfaRegistrationDto,
-} from "@/schemas/mfa.schemas";
-import {
   AuthenticationResponseJSON,
   RegistrationResponseJSON,
 } from "@simplewebauthn/types";
+import { APIError } from "@/lib/errors";
 
 export async function registerAdmin(body: RegisterAdminDto) {
   const { confirmPassword, ...data } = body;
@@ -24,7 +21,7 @@ export async function registerAdmin(body: RegisterAdminDto) {
   try {
     response = await api.post("/admin/register", data);
   } catch (err) {
-    if (err instanceof Error) error = err;
+    if (err instanceof APIError) error = err;
   }
   return { error, response };
 }
@@ -35,7 +32,7 @@ export async function loginAdmin(body: LoginAdminDto) {
   try {
     response = await api.post("/admin/login", body);
   } catch (err) {
-    if (err instanceof Error) error = err;
+    if (err instanceof APIError) error = err;
   }
   return { error, response };
 }
@@ -48,7 +45,7 @@ export async function getMfaRegistrationOptions(email: string) {
       params: { email },
     });
   } catch (err) {
-    if (err instanceof Error) error = err;
+    if (err instanceof APIError) error = err;
   }
   return { error, response };
 }
@@ -69,7 +66,7 @@ export async function verifyMfaRegistrationOptions({
   try {
     response = await api.post("/mfa/verify-registration-options", body);
   } catch (err) {
-    if (err instanceof Error) error = err;
+    if (err instanceof APIError) error = err;
   }
   return { error, response };
 }
@@ -82,7 +79,7 @@ export async function getMfaAuthenticationOptions(email: string) {
       params: { email },
     });
   } catch (err) {
-    if (err instanceof Error) error = err;
+    if (err instanceof APIError) error = err;
   }
   return { error, response };
 }
@@ -100,7 +97,7 @@ export async function verifyMfaAuthenticationOptions({
   try {
     response = await api.post("/mfa/verify-authentication-options", body);
   } catch (err) {
-    if (err instanceof Error) error = err;
+    if (err instanceof APIError) error = err;
   }
   return { error, response };
 }
