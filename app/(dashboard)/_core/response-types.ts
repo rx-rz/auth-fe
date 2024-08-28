@@ -22,3 +22,8 @@ export type UpdateAdminDetailsResponse = {
   success: boolean;
   admin: Admin;
 };
+
+export type LogoutAdminResponse = {
+  success: boolean;
+  message: string;
+};

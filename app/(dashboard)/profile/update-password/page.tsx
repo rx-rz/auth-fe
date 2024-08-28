@@ -11,24 +11,26 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
+import { useUserStore } from "@/store/user.store";
 const UpdatePasswordPage = () => {
   const {
     updateAdminPasswordForm: form,
     loading,
     submitUpdateAdminPasswordForm,
   } = useUpdateAdminPassword();
+  const { user } = useUserStore();
   return (
     <div className="">
       <h1 className="text-2xl font-bold opacity-90">Update Admin Password</h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(submitUpdateAdminPasswordForm)}
-          className="max-w-[400px] w-[95%] mt-8"
+          className="max-w-[400px] w-[95%] mt-8 "
         >
           <FormField
             control={form.control}
             name="email"
-            disabled
+            defaultValue={user.email}
             render={({ field }) => (
               <FormItem className="mb-4 hidden">
                 <FormLabel>Email</FormLabel>

@@ -4,6 +4,7 @@ import {
   UpdateAdminPasswordDto,
 } from "@/schemas/admin.schemas";
 import {
+  LogoutAdminResponse,
   UpdateAdminDetailsResponse,
   UpdateAdminEmailResponse,
   UpdateAdminPasswordResponse,
@@ -37,9 +38,21 @@ export async function updateAdminDetails(body: UpdateAdminDto) {
   let error;
   let response: UpdateAdminDetailsResponse | undefined;
   try {
-    response = await api.put('/admin/update-details', body)
+    response = await api.put("/admin/update-details", body);
   } catch (err) {
     if (err instanceof APIError) error = err;
   }
   return { error, response };
 }
+
+export async function logoutAdmin() {
+  let error;
+  let response: LogoutAdminResponse | undefined;
+  try {
+    response = await api.get("/admin/logout");
+  } catch (err) {
+    if (err instanceof APIError) error = err;
+  }
+  return { error, response };
+}
+

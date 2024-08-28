@@ -29,7 +29,6 @@ const UpdateDetailsPage = () => {
           <FormField
             control={form.control}
             name="email"
-            
             render={({ field }) => (
               <FormItem className="mb-4 hidden">
                 <FormLabel>Email</FormLabel>
@@ -37,6 +36,7 @@ const UpdateDetailsPage = () => {
                   <Input
                     placeholder="adeleyetemiloluwa.work@gmail.com"
                     className=""
+
                     {...field}
                     type="email"
                   />

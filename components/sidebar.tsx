@@ -8,11 +8,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-
 import { decodeUserToken, User } from "@/lib/utils";
 import { cookies } from "next/headers";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
+import { LogoutButton } from "./logout-button";
 
 export const Sidebar = () => {
   const user: User | undefined = decodeUserToken(
@@ -42,6 +42,7 @@ export const Sidebar = () => {
           <DropdownMenuItem>
             <Link href={ROUTES.UPDATE_DETAILS}>Update details</Link>
           </DropdownMenuItem>
+          <LogoutButton />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

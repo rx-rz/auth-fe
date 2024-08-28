@@ -28,7 +28,6 @@ const MFAPage = () => {
           strong, phishing-resistant authentication.
         </AlertDescription>
       </Alert>
-
       <Button
         className="font-satoshi w-full  gap-4 max-w-[500px] mt-10"
         onClick={async () => {

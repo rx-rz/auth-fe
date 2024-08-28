@@ -16,11 +16,13 @@ import {
   updateAdminPassword,
 } from "./actions";
 import { useUserStore } from "@/store/user.store";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/routes";
 
 export const useUpdateAdminEmail = () => {
   const [loading, setLoading] = useState(false);
   const { user, setUser } = useUserStore();
-
+  const router = useRouter();
   const { toast } = useToast();
   const updateAdminEmailForm = useForm<UpdateAdminEmailDto>({
     resolver: zodResolver(UpdateAdminEmailSchema),
@@ -39,7 +41,7 @@ export const useUpdateAdminEmail = () => {
       toast({
         title: "Admin email updated successfully",
       });
-      location.reload();
+      router.push(ROUTES.PROJECTS);
     }
     if (error) {
       toast({
@@ -55,12 +57,14 @@ export const useUpdateAdminEmail = () => {
 
 export const useUpdateAdminPassword = () => {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   const { toast } = useToast();
+  const { user } = useUserStore();
   const updateAdminPasswordForm = useForm<UpdateAdminPasswordDto>({
     resolver: zodResolver(UpdateAdminPasswordSchema),
     defaultValues: {
       currentPassword: "",
-      email: "",
+      email: user.email,
       newPassword: "",
     },
   });
@@ -72,7 +76,7 @@ export const useUpdateAdminPassword = () => {
       toast({
         title: "Admin password updated successfully",
       });
-      location.reload();
+      router.push(ROUTES.PROJECTS);
     }
     if (error) {
       toast({
@@ -88,13 +92,14 @@ export const useUpdateAdminPassword = () => {
 export const useUpdateAdminDetails = () => {
   const [loading, setLoading] = useState(false);
   const { user, setUser } = useUserStore();
+  const router = useRouter();
   const { toast } = useToast();
   const updateAdminDetailsForm = useForm<UpdateAdminDto>({
     resolver: zodResolver(UpdateAdminSchema),
     defaultValues: {
-      email: "",
-      firstName: "",
-      lastName: "",
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
     },
   });
 
@@ -110,7 +115,7 @@ export const useUpdateAdminDetails = () => {
       toast({
         title: "Admin details updated successfully",
       });
-      location.reload();
+      router.push(ROUTES.PROJECTS);
     }
     if (error) {
       toast({
