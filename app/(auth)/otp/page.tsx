@@ -1,0 +1,125 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
+import { useState } from "react";
+import { getOTP, verifyAdminOTP } from "../_core/actions";
+import { useUserStore } from "@/store/user.store";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/routes";
+import { useToast } from "@/components/ui/use-toast";
+
+const OTPPage = () => {
+  const { user, setUser } = useUserStore();
+  const { toast } = useToast();
+  const [otp, setOTP] = useState("");
+  const [getOTPButtonClicked, setGetOTPButtonClicked] = useState(false);
+  const [otpError, setOTPError] = useState("");
+  const router = useRouter();
+
+  async function verifyOTP() {
+    const { error, response } = await verifyAdminOTP({
+      code: otp,
+      email: user.email ?? "",
+    });
+    if (response && response.success) {
+      toast({
+        title: "OTP verified successfully",
+      });
+      setUser({ ...user, isVerified: true });
+      router.push(ROUTES.PROJECTS);
+    }
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: error?.error,
+      });
+      setOTPError(error?.error);
+    }
+  }
+  async function getOTPInEmail() {
+    const { error, response } = await getOTP({
+      email: user.email ?? "",
+      isAdmin: true,
+    });
+    if (response && response.success) {
+      toast({
+        title: "OTP sent to your email.",
+      });
+    }
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: error?.error,
+      });
+    }
+  }
+
+  return (
+    <div className="flex items-center flex-col mt-32">
+      <h1 className="text-2xl font-bold">Input OTP</h1>
+      <p className="font-medium opacity-70 mb-10 mt-1">
+        Enter the OTP provided in your email
+      </p>
+      <InputOTP
+        maxLength={6}
+        className=""
+        size={60}
+        value={otp}
+        onChange={(val) => setOTP(val)}
+      >
+        <InputOTPGroup className="flex gap-4">
+          <InputOTPSlot
+            index={0}
+            className={`h-14 w-14 border-2 ${otpError ? "border-red-500" : ""}`}
+          />
+          <InputOTPSlot
+            index={1}
+            className={`h-14 w-14 border-2 ${otpError ? "border-red-500" : ""}`}
+          />
+          <InputOTPSlot
+            index={2}
+            className={`h-14 w-14 border-2 ${otpError ? "border-red-500" : ""}`}
+          />
+          <InputOTPSlot
+            index={3}
+            className={`h-14 w-14 border-2 ${otpError ? "border-red-500" : ""}`}
+          />
+          <InputOTPSlot
+            index={4}
+            className={`h-14 w-14 border-2 ${otpError ? "border-red-500" : ""}`}
+          />
+          <InputOTPSlot
+            index={5}
+            className={`h-14 w-14 border-2 ${otpError ? "border-red-500" : ""}`}
+          />
+        </InputOTPGroup>
+      </InputOTP>
+      {getOTPButtonClicked ? (
+        <Button
+          onClick={async () => {
+            await verifyOTP();
+          }}
+          className="mt-6 w-full max-w-[300px]"
+        >
+          Verify OTP
+        </Button>
+      ) : (
+        <Button
+          onClick={async () => {
+            await getOTPInEmail();
+            setGetOTPButtonClicked(true);
+          }}
+          className="mt-6 w-full max-w-[300px]"
+        >
+          Get OTP
+        </Button>
+      )}
+    </div>
+  );
+};
+
+export default OTPPage;

@@ -55,3 +55,17 @@ export type GetMfaAuthenticationOptionsResponse = {
 };
 
 export type VerifyMfaAuthenticationResponse = RegisterAdminResponse;
+
+export type GetOTPResponse = {
+  otpDetails: {
+    email: string;
+    createdAt: Date;
+    code: string;
+    expiresAt: Date;
+  };
+  success: boolean;
+  mailError: any;
+  mailResponse: any;
+};
+
+export type VerifyAdminOTPResponse = RegisterAdminResponse;

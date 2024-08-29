@@ -1,4 +1,4 @@
-import { UserCircle } from "lucide-react";
+import { Layers, UserCircle } from "lucide-react";
 import { Logo } from "./ui/logo";
 import {
   DropdownMenu,
@@ -20,8 +20,13 @@ export const Sidebar = () => {
   );
 
   return (
-    <div className="w-12 h-screen border py-3 flex flex-col">
-      <Logo />
+    <div className="w-12 h-screen border py-3 flex flex-col items-center gap-5">
+      <Link href={ROUTES.LOGIN}>
+        <Logo />
+      </Link>
+      <Link href={ROUTES.PROJECTS}>
+        <Layers />
+      </Link>
       <DropdownMenu>
         <DropdownMenuTrigger className="w-fit mx-auto mt-auto">
           <UserCircle size={32} strokeWidth={1.2} />

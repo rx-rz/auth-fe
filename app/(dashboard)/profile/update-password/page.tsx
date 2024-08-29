@@ -72,7 +72,7 @@ const UpdatePasswordPage = () => {
               </FormItem>
             )}
           />
-          <Button className="w-full mt-10" type="submit">
+          <Button className="w-full mt-10 shadow-inner" type="submit">
             {loading ? (
               <MoreHorizontal size={20} className="animate-bounce" />
             ) : (

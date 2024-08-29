@@ -3,8 +3,10 @@ import { LoginAdminDto, RegisterAdminDto } from "@/schemas/admin.schemas";
 import {
   GetMfaAuthenticationOptionsResponse,
   GetMfaRegistrationOptionsResponse,
+  GetOTPResponse,
   LoginAdminReponse,
   RegisterAdminResponse,
+  VerifyAdminOTPResponse,
   VerifyMfaAuthenticationResponse,
   VerifyMfaRegistrationResponse,
 } from "./response-types";
@@ -13,6 +15,11 @@ import {
   RegistrationResponseJSON,
 } from "@simplewebauthn/types";
 import { APIError } from "@/lib/errors";
+import {
+  CreateOtpDto,
+  CreateOtpSchema,
+  VerifyAdminOtpDto,
+} from "@/schemas/otp.schemas";
 
 export async function registerAdmin(body: RegisterAdminDto) {
   const { confirmPassword, ...data } = body;
@@ -96,6 +103,28 @@ export async function verifyMfaAuthenticationOptions({
   const body = { email, ...options };
   try {
     response = await api.post("/mfa/verify-authentication-options", body);
+  } catch (err) {
+    if (err instanceof APIError) error = err;
+  }
+  return { error, response };
+}
+
+export async function getOTP(body: CreateOtpDto) {
+  let error;
+  let response: GetOTPResponse | undefined;
+  try {
+    response = await api.post("/otp/send-otp", body);
+  } catch (err) {
+    if (err instanceof APIError) error = err;
+  }
+  return { error, response };
+}
+
+export async function verifyAdminOTP(body: VerifyAdminOtpDto) {
+  let error;
+  let response: VerifyAdminOTPResponse | undefined;
+  try {
+    response = await api.post("/otp/verify-admin-otp", body);
   } catch (err) {
     if (err instanceof APIError) error = err;
   }
