@@ -13,6 +13,12 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
 import { LogoutButton } from "./logout-button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 export const Sidebar = () => {
   const user: User | undefined = decodeUserToken(
@@ -24,9 +30,19 @@ export const Sidebar = () => {
       <Link href={ROUTES.LOGIN}>
         <Logo />
       </Link>
-      <Link href={ROUTES.PROJECTS}>
-        <Layers />
-      </Link>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <Link href={ROUTES.PROJECTS}>
+              <Layers />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent className="absolute left-6">
+            <p>Projects</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
       <DropdownMenu>
         <DropdownMenuTrigger className="w-fit mx-auto mt-auto">
           <UserCircle size={32} strokeWidth={1.2} />
