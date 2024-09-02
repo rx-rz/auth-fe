@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import { MoreHorizontal } from "lucide-react";
+import { FormHeader } from "../components/form-header";
 
 const ResetPasswordPage = () => {
   const {
@@ -22,14 +23,12 @@ const ResetPasswordPage = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(submitResetUserPasswordForm)}>
-        <div className="mx-auto w-fit mb-10">
-          <Logo />
-        </div>
+        <FormHeader title="Reset Password" />
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem className="mb-4">
+            <FormItem className="mb-4 mt-6">
               <FormLabel>Email</FormLabel>
               <FormControl className="">
                 <Input

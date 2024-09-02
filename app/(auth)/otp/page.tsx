@@ -11,6 +11,7 @@ import { useUserStore } from "@/store/user.store";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
 import { useToast } from "@/components/ui/use-toast";
+import { FormHeader } from "../components/form-header";
 
 const OTPPage = () => {
   const params = useSearchParams();
@@ -64,8 +65,8 @@ const OTPPage = () => {
   }
 
   return (
-    <div className="flex items-center flex-col">
-      <h1 className="text-2xl font-bold">Input OTP</h1>
+    <div className="">
+      <FormHeader title="Input OTP" />
       <p className="font-medium opacity-70 mb-10 mt-1">
         Enter the OTP provided in your email
       </p>
@@ -108,7 +109,7 @@ const OTPPage = () => {
           onClick={async () => {
             await verifyOTP();
           }}
-          className="mt-6 w-full max-w-[300px]"
+          className="mt-6 w-full max-w-[200px]"
         >
           Verify OTP
         </Button>
@@ -118,7 +119,7 @@ const OTPPage = () => {
             await getOTPInEmail();
             setGetOTPButtonClicked(true);
           }}
-          className="mt-6 w-full max-w-[300px]"
+          className="mt-6 w-full max-w-[200px]"
         >
           Get OTP
         </Button>

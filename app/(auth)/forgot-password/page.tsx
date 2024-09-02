@@ -6,16 +6,23 @@ import { ROUTES } from "@/lib/routes";
 import { Label } from "@radix-ui/react-label";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FormHeader } from "../components/form-header";
 
 const ForgotPasswordPage = () => {
   const router = useRouter();
   const [email, setEmail] = useState("");
 
   return (
-    <div className="max-w-[400px] mx-auto">
-      <div>
-        <Label>Email</Label>
-        <Input value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
+    <>
+      <FormHeader title="Forgot Password" />
+      <div className="mt-6">
+        <Label className="text-sm opacity-90 font-medium">Email</Label>
+        <Input
+          className="mt-2"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="email"
+        />
       </div>
       <Button
         onClick={() => {
@@ -26,7 +33,7 @@ const ForgotPasswordPage = () => {
       >
         Proceed with email
       </Button>
-    </div>
+    </>
   );
 };
 

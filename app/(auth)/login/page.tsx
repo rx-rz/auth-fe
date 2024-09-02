@@ -14,23 +14,19 @@ import { Logo } from "@/components/ui/logo";
 import { ROUTES } from "@/lib/routes";
 import Link from "next/link";
 import { MoreHorizontal } from "lucide-react";
+import { FormHeader } from "../components/form-header";
 
 const LoginPage = () => {
   const { loginAdminForm: form, loading, submitLoginAdminForm } = useLogin();
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(submitLoginAdminForm)}
-
-      >
-        <div className="mx-auto w-fit mb-10">
-          <Logo />
-        </div>
+      <form onSubmit={form.handleSubmit(submitLoginAdminForm)}>
+        <FormHeader title="Log In" />
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem className="mb-4">
+            <FormItem className="mb-4 mt-6">
               <FormLabel>Email</FormLabel>
               <FormControl className="">
                 <Input

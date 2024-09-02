@@ -4,7 +4,7 @@ import { useMFA } from "../_core/forms";
 import { useUserStore } from "@/store/user.store";
 import { FingerprintIcon, InfoIcon, MoreHorizontal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Logo } from "@/components/ui/logo";
+import { FormHeader } from "../components/form-header";
 
 const MFAPage = () => {
   const { user } = useUserStore();
@@ -12,12 +12,7 @@ const MFAPage = () => {
     useMFA();
   return (
     <div>
-      <div className="mt-32"></div>
-      <Logo />
-      <p className="font-medium text-xl opacity-80 mt-10">
-        Secure access with passkeys
-      </p>
-
+      <FormHeader title="Secure access with passkeys" />
       <Alert className="mt-10">
         <InfoIcon className="h-4 w-4" />
         <AlertTitle>
