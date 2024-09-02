@@ -16,6 +16,6 @@ export const getAdminProjects = () => {
     data,
     isLoading: projectsIsLoading,
     error,
-  } = useSWR(user ? "/admin/get-projects" : null, fetcher);
+  } = useSWR(user.email ? "/admin/get-projects" : null, fetcher);
   return { data, projectsIsLoading, error };
 };
