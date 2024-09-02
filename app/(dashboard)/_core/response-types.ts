@@ -46,6 +46,16 @@ export type GetProjectKeysResponse = {
   apiKey: string;
 };
 
+export type GetAdminProjectsResponse = {
+  success: boolean;
+  adminProjects: {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    name: string;
+  }[];
+};
+
 export type GetProjectResponse = {
   success: boolean;
   project: {

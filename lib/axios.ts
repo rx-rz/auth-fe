@@ -1,6 +1,5 @@
 import axios from "axios";
 import { APIError } from "./errors";
-import { redirect } from "next/dist/server/api-utils";
 
 export const api = axios.create({
   withCredentials: true,
@@ -10,10 +9,12 @@ export const api = axios.create({
       : process.env.NEXT_PUBLIC_API_URL,
 });
 api.interceptors.request.use((request) => {
+  console.log({ request: request.headers['Cookie'] });
   return request;
 });
 api.interceptors.response.use(
   (response) => {
+    console.log({response: response.headers['set-cookie ']})
     return response.data;
   },
   (error) => {
@@ -29,3 +30,4 @@ api.interceptors.response.use(
     return Promise.reject(apiError);
   }
 );
+

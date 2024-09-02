@@ -1,18 +1,22 @@
+"use client";
 import { ROUTES } from "@/lib/routes";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { getAllAdminProjects } from "../_core/actions";
-import { decodeUserToken, User } from "@/lib/utils";
-import { cookies } from "next/headers";
+import { getAdminProjects } from "../_core/swr";
+import { ProjectCard } from "./components/project-card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/components/ui/use-toast";
+import { useEffect } from "react";
 
-const ProjectsPage = async () => {
-  const user: User | undefined = decodeUserToken(
-    cookies().get("accessToken")?.value
-  );
-  const { response, error } = await getAllAdminProjects({
-    adminId: user?.id ?? "",
-  });
-  console.log({response, error})
+const ProjectsPage = () => {
+  const { data, error, projectsIsLoading } = getAdminProjects();
+  const { toast } = useToast();
+  useEffect(() => {
+    toast({
+      title: error?.error,
+      variant: "destructive",
+    });
+  }, [error]);
   return (
     <div>
       <h1 className="text-2xl mt-1 opacity-80 font-bold mb-8">Projects</h1>
@@ -24,12 +28,23 @@ const ProjectsPage = async () => {
           <PlusIcon size={50} className="mb-2" strokeWidth={1.2} />
           <p className="font-medium opacity-70 text-base">Add A Project</p>
         </Link>
-        {response?.projects ? (
-          response.projects.map((project) => (
-            <div key={project.id} className="border w-full h-48">
-              <p>{project.name}</p>
-            </div>
-          ))
+        {projectsIsLoading ? (
+          <>
+            <Skeleton className="h-48" />
+            <Skeleton className="h-48" />
+            <Skeleton className="h-48" />
+            <Skeleton className="h-48" />
+            <Skeleton className="h-48" />
+            <Skeleton className="h-48" />
+            <Skeleton className="h-48" />
+            <Skeleton className="h-48" />
+            <Skeleton className="h-48" />
+          </>
+        ) : (
+          <></>
+        )}
+        {data?.adminProjects ? (
+          data.adminProjects.map((project) => <ProjectCard project={project} />)
         ) : (
           <></>
         )}
