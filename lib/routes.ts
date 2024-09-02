@@ -9,6 +9,7 @@ export const ROUTES = {
   UPDATE_DETAILS: "/profile/update-details",
   DELETE_ACCOUNT: "/profile/delete-account",
   PROJECTS: "/projects",
+  PROJECT_DETAILS: (id: string) => `/projects/${id}`,
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
   NEW_PROJECT: "/projects/new-project",

@@ -12,9 +12,13 @@ type Props = {
   };
 };
 export const ProjectCard = ({ project }: Props) => {
-  const { id, name, createdAt, updatedAt } = project;
+  const { id, name, updatedAt } = project;
   return (
-    <Link href={ROUTES.NEW_PROJECT} key={id} className="border w-full h-48 p-5 flex flex-col group relative hover:bg-slate-100 ">
+    <Link
+      href={ROUTES.PROJECT_DETAILS(id)}
+      key={id}
+      className="border w-full h-48 p-5 flex flex-col group relative hover:bg-slate-100 "
+    >
       <ArrowUpRight
         className="bg-primary p-1 rounded-full absolute top-5 hidden group-hover:block right-5"
         stroke="#fff"

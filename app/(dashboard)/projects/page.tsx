@@ -13,7 +13,7 @@ const ProjectsPage = () => {
   const { toast } = useToast();
   useEffect(() => {
     toast({
-      title: error?.error ?? 'Error occured',
+      title: error?.error ?? "Error occured",
       variant: "destructive",
     });
   }, [error]);
