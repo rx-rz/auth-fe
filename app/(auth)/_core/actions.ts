@@ -6,6 +6,7 @@ import {
   GetOTPResponse,
   LoginAdminReponse,
   RegisterAdminResponse,
+  ResetAdminPasswordResponse,
   VerifyAdminOTPResponse,
   VerifyMfaAuthenticationResponse,
   VerifyMfaRegistrationResponse,
@@ -125,6 +126,20 @@ export async function verifyAdminOTP(body: VerifyAdminOtpDto) {
   let response: VerifyAdminOTPResponse | undefined;
   try {
     response = await api.post("/otp/verify-admin-otp", body);
+  } catch (err) {
+    if (err instanceof APIError) error = err;
+  }
+  return { error, response };
+}
+
+export async function resetAdminPassword(body: {
+  email: string;
+  newPassword: string;
+}) {
+  let error;
+  let response: ResetAdminPasswordResponse | undefined;
+  try {
+    response = await api.put("/admin/reset-password", body);
   } catch (err) {
     if (err instanceof APIError) error = err;
   }

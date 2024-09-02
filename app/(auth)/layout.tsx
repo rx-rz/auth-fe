@@ -13,7 +13,11 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           </p>
         </div>
       </div>
-      <div className="w-full md:w-2/5">{children}</div>
+      <div className="w-full md:w-2/5">
+        <div className="mx-auto mt-24 w-[90%] max-w-[400px] font-satoshi">
+          {children}
+        </div>
+      </div>
     </div>
   );
 }

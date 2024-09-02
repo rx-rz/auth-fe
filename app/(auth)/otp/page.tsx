@@ -8,11 +8,12 @@ import {
 import { useState } from "react";
 import { getOTP, verifyAdminOTP } from "../_core/actions";
 import { useUserStore } from "@/store/user.store";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
 import { useToast } from "@/components/ui/use-toast";
 
 const OTPPage = () => {
+  const params = useSearchParams();
   const { user, setUser } = useUserStore();
   const { toast } = useToast();
   const [otp, setOTP] = useState("");
@@ -21,16 +22,19 @@ const OTPPage = () => {
   const router = useRouter();
 
   async function verifyOTP() {
+    const resetEmail = params.get("reset-email") ?? "";
     const { error, response } = await verifyAdminOTP({
       code: otp,
-      email: user.email ?? "",
+      email: resetEmail ?? user.email ?? "",
     });
     if (response && response.success) {
       toast({
         title: "OTP verified successfully",
       });
       setUser({ ...user, isVerified: true });
-      router.push(ROUTES.PROJECTS);
+      resetEmail
+        ? router.push(ROUTES.RESET_PASSWORD)
+        : router.push(ROUTES.PROJECTS);
     }
     if (error) {
       toast({
@@ -41,13 +45,14 @@ const OTPPage = () => {
     }
   }
   async function getOTPInEmail() {
+    const resetEmail = params.get("reset-email") ?? "";
     const { error, response } = await getOTP({
-      email: user.email ?? "",
+      email: resetEmail ?? user.email ?? "",
       isAdmin: true,
     });
     if (response && response.success) {
       toast({
-        title: "OTP sent to your email.",
+        title: `OTP sent to your email ${resetEmail ?? user.email ?? ""}`,
       });
     }
     if (error) {
@@ -59,7 +64,7 @@ const OTPPage = () => {
   }
 
   return (
-    <div className="flex items-center flex-col mt-32">
+    <div className="flex items-center flex-col">
       <h1 className="text-2xl font-bold">Input OTP</h1>
       <p className="font-medium opacity-70 mb-10 mt-1">
         Enter the OTP provided in your email

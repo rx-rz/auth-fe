@@ -7,6 +7,7 @@ import {
   LoginAdminSchema,
   RegisterAdminDto,
   RegisterAdminSchema,
+  ResetAdminPasswordDto,
 } from "@/schemas/admin.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -15,13 +16,14 @@ import {
   getMfaRegistrationOptions,
   loginAdmin,
   registerAdmin,
+  resetAdminPassword,
   verifyMfaAuthenticationOptions,
   verifyMfaRegistrationOptions,
 } from "./actions";
 import { useRouter } from "next/navigation";
 import { decodeUserToken, User } from "@/lib/utils";
 import { useUserStore } from "@/store/user.store";
-import { useToast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { ROUTES } from "@/lib/routes";
 
@@ -165,7 +167,7 @@ export const useMFA = () => {
           toast({
             title: "Passkey verification successful",
           });
-          router.push(ROUTES.PROFILE);
+          router.push(ROUTES.PROJECTS);
         }
         if (error) {
           toast({
@@ -180,3 +182,41 @@ export const useMFA = () => {
   return { loading, triggerWebMFARegistration, triggerWebMFAAuthentication };
 };
 ////
+
+export const useResetPassword = () => {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const resetPasswordForm = useForm<ResetAdminPasswordDto>({
+    defaultValues: {
+      confirmPassword: "",
+      email: "",
+      newPassword: "",
+    },
+  });
+
+  async function submitResetUserPasswordForm(values: ResetAdminPasswordDto) {
+    setLoading(true);
+    const { email, newPassword } = values;
+    const { error, response } = await resetAdminPassword({
+      email,
+      newPassword,
+    });
+    if (error) {
+      toast({
+        title: error?.error,
+        variant: "destructive",
+      });
+    }
+    if (response && response.success) {
+      toast({
+        title: "Password reset successfully",
+      });
+      router.push(ROUTES.LOGIN);
+    }
+    setLoading(false);
+  }
+
+  return { loading, resetPasswordForm, submitResetUserPasswordForm };
+};

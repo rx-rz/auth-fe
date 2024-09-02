@@ -69,3 +69,15 @@ export type GetOTPResponse = {
 };
 
 export type VerifyAdminOTPResponse = RegisterAdminResponse;
+
+export type ResetAdminPasswordResponse = {
+  success: boolean;
+  admin: {
+    email: string;
+    id: string;
+    firstName: string;
+    lastName: string;
+    isVerified: boolean;
+    mfaEnabled: boolean;
+  };
+};

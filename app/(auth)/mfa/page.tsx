@@ -11,9 +11,9 @@ const MFAPage = () => {
   const { loading, triggerWebMFARegistration, triggerWebMFAAuthentication } =
     useMFA();
   return (
-    <div className="items-center font-satoshi mx-auto flex  h-full w-full flex-col max-w-[500px]">
+    <div>
       <div className="mt-32"></div>
-      <Logo/>
+      <Logo />
       <p className="font-medium text-xl opacity-80 mt-10">
         Secure access with passkeys
       </p>

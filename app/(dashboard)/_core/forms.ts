@@ -1,4 +1,4 @@
-import { useToast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import {
   UpdateAdminDto,
   UpdateAdminEmailDto,
@@ -11,6 +11,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
+  createProject,
+  getProjectKeys,
   updateAdminDetails,
   updateAdminEmail,
   updateAdminPassword,
@@ -18,6 +20,11 @@ import {
 import { useUserStore } from "@/store/user.store";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
+import {
+  CreateProjectDto,
+  CreateProjectSchema,
+} from "@/schemas/project.schemas";
+import { CreateProjectResponse } from "./response-types";
 
 export const useUpdateAdminEmail = () => {
   const [loading, setLoading] = useState(false);
@@ -126,4 +133,53 @@ export const useUpdateAdminDetails = () => {
     setLoading(false);
   }
   return { updateAdminDetailsForm, loading, submitUpdateAdminDetailsForm };
+};
+
+// PROJECTS
+
+export const useCreateNewProject = () => {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const { user } = useUserStore();
+  const [clientKey, setClientKey] = useState("");
+  const [apiKey, setApiKey] = useState("");
+  const [success, setSuccess] = useState(false);
+  const createNewProjectForm = useForm<CreateProjectDto>({
+    resolver: zodResolver(CreateProjectSchema),
+    defaultValues: {
+      adminId: user.id ?? "",
+      name: "",
+    },
+  });
+  async function submitCreateNewProjectForm(values: CreateProjectDto) {
+    setLoading(true);
+    const { error, response } = await createProject(values);
+    if (response && response.success) {
+      setLoading(false);
+      const { response: projectKeysResponse } = await getProjectKeys({
+        projectId: response.project.id,
+      });
+      if (projectKeysResponse && projectKeysResponse.success) {
+        setApiKey(projectKeysResponse.apiKey);
+        setClientKey(projectKeysResponse.clientKey);
+        setSuccess(true);
+      }
+    }
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: error?.error,
+      });
+      setLoading(false);
+    }
+  }
+
+  return {
+    loading,
+    success,
+    apiKey,
+    clientKey,
+    createNewProjectForm,
+    submitCreateNewProjectForm,
+  };
 };

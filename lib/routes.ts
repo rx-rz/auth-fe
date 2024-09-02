@@ -2,11 +2,14 @@ export const ROUTES = {
   REGISTER: "/register",
   LOGIN: "/login",
   MFA: "/mfa",
-  PROFILE: '/profile',
-  FORGOT_PASSWORD: "/forgot-password",
+  PROFILE: "/profile",
   UPDATE_EMAIL: "/profile/update-email",
   UPDATE_PASSWORD: "/profile/update-password",
+  OTP_PAGE: "/otp",
   UPDATE_DETAILS: "/profile/update-details",
   DELETE_ACCOUNT: "/profile/delete-account",
-  PROJECTS: '/projects'
+  PROJECTS: "/projects",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
+  NEW_PROJECT: "/projects/new-project",
 };

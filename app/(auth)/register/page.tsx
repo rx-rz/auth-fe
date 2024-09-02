@@ -14,6 +14,7 @@ import { Logo } from "@/components/ui/logo";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
+import { FormHeader } from "../components/form-header";
 const RegisterPage = () => {
   const {
     registerAdminForm: form,
@@ -23,18 +24,13 @@ const RegisterPage = () => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(submitRegisterAdminForm)}
-        className="mx-auto mt-24 w-[90%] max-w-[400px] font-satoshi"
-      >
-        <div className="mx-auto w-fit">
-          <Logo />
-        </div>
+      <form onSubmit={form.handleSubmit(submitRegisterAdminForm)}>
+        <FormHeader title="Register" />
         <FormField
           control={form.control}
           name="firstName"
           render={({ field }) => (
-            <FormItem className="mb-4 mt-16">
+            <FormItem className="mb-4 mt-8">
               <FormLabel>First Name</FormLabel>
               <FormControl className="">
                 <Input placeholder="John" {...field} />
@@ -112,7 +108,10 @@ const RegisterPage = () => {
         </Button>
       </form>
       <p className="text-center mt-2 text-sm">
-        Already registered? Please <Link href={ROUTES.LOGIN} className="underline underline-offset-2">login.</Link>
+        Already registered? Please{" "}
+        <Link href={ROUTES.LOGIN} className="underline underline-offset-2">
+          login.
+        </Link>
       </p>
     </Form>
   );

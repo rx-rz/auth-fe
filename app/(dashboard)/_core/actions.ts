@@ -75,18 +75,18 @@ export async function createProject(body: CreateProjectDto) {
   let error;
   let response: CreateProjectResponse | undefined;
   try {
-    response = await api.post("/project/create-project");
+    response = await api.post("/project/create-project", body);
   } catch (err) {
     if (err instanceof APIError) error = err;
   }
-  return { error, response };
+return { error, response };
 }
 
 export async function updateProjectName(body: UpdateProjectNameDto) {
   let error;
   let response: UpdateProjectNameResponse | undefined;
   try {
-    response = await api.post("/project/update-project-name");
+    response = await api.post("/project/update-project-name", body);
   } catch (err) {
     if (err instanceof APIError) error = err;
   }

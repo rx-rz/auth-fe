@@ -1,4 +1,5 @@
 "use client";
+import { useResetPassword } from "../_core/forms";
 import {
   Form,
   FormControl,
@@ -7,22 +8,20 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useLogin } from "../_core/forms";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
-import { ROUTES } from "@/lib/routes";
-import Link from "next/link";
 import { MoreHorizontal } from "lucide-react";
 
-const LoginPage = () => {
-  const { loginAdminForm: form, loading, submitLoginAdminForm } = useLogin();
+const ResetPasswordPage = () => {
+  const {
+    loading,
+    submitResetUserPasswordForm,
+    resetPasswordForm: form,
+  } = useResetPassword();
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(submitLoginAdminForm)}
-
-      >
+      <form onSubmit={form.handleSubmit(submitResetUserPasswordForm)}>
         <div className="mx-auto w-fit mb-10">
           <Logo />
         </div>
@@ -46,10 +45,10 @@ const LoginPage = () => {
         />
         <FormField
           control={form.control}
-          name="password"
+          name="newPassword"
           render={({ field }) => (
             <FormItem className="mb-4">
-              <FormLabel>Password</FormLabel>
+              <FormLabel>New Password</FormLabel>
               <FormControl className="">
                 <Input
                   placeholder="6 characters minimum"
@@ -58,28 +57,32 @@ const LoginPage = () => {
                 />
               </FormControl>
               <FormMessage />
-              <div className="flex items-end justify-end">
-                <Link
-                  href={ROUTES.FORGOT_PASSWORD}
-                  className="text-xs underline underline-offset-1 font-bold"
-                >
-                  Forgot password?
-                </Link>
-              </div>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="confirmPassword"
+          render={({ field }) => (
+            <FormItem className="mb-4">
+              <FormLabel>Confirm New Password</FormLabel>
+              <FormControl className="">
+                <Input
+                  placeholder="6 characters minimum"
+                  {...field}
+                  type="password"
+                />
+              </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
         <Button className="w-full mt-10" type="submit">
-          {loading ? <MoreHorizontal size={30} /> : "Log In"}
+          {loading ? <MoreHorizontal size={30} /> : "Reset Password"}
         </Button>
       </form>
-      <p className="text-center mt-2 text-sm">
-        Don't have an account? Please{" "}
-        <Link href={ROUTES.REGISTER} className="underline underline-offset-2">
-          register.
-        </Link>
-      </p>
     </Form>
   );
 };
-export default LoginPage;
+
+export default ResetPasswordPage;

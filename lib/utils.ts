@@ -14,6 +14,7 @@ export type User = {
   role: "admin";
   mfaEnabled: boolean;
 };
+
 export function decodeUserToken(token: string | undefined) {
   if (token) {
     const user = JSON.parse(

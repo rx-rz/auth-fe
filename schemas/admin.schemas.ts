@@ -176,4 +176,26 @@ export const UpdateAdminPasswordSchema = z.object({
 
 export type UpdateAdminPasswordDto = z.infer<typeof UpdateAdminPasswordSchema>;
 
-
+export const ResetAdminPasswordSchema = z
+  .object({
+    email: z
+      .string({
+        invalid_type_error: "Email must be a string",
+        required_error: "Email not provided.",
+      })
+      .email("Invalid email format")
+      .max(255, "Email cannot exceed 255 characters"),
+    newPassword: z
+      .string({
+        invalid_type_error: "Current password must be a string",
+        required_error: "Current password not provided.",
+      })
+      .min(6, "Password must be at least 6 characters")
+      .max(100, "Password cannot exceed 100 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+export type ResetAdminPasswordDto = z.infer<typeof ResetAdminPasswordSchema>;
