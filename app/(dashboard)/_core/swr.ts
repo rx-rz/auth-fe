@@ -7,9 +7,11 @@ import {
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { useUserStore } from "@/store/user.store";
-import { UpdateProjectNameDto } from "@/schemas/project.schemas";
+import { ProjectIdDto, UpdateProjectNameDto } from "@/schemas/project.schemas";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/routes";
 
-export const getAdminProjects = () => {
+export const getAdminProjectsQuery = () => {
   const { user } = useUserStore();
 
   const fetcher = (url: string): Promise<GetAdminProjectsResponse> => {
@@ -26,7 +28,7 @@ export const getAdminProjects = () => {
   return { data, projectsIsLoading, error };
 };
 
-export const getProjectDetails = ({ id }: { id: string | string[] }) => {
+export const getProjectDetailsQuery = ({ id }: { id: string | string[] }) => {
   const fetcher = (url: string): Promise<GetProjectResponse> => {
     return api.get(url, {
       params: { projectId: id },
@@ -41,7 +43,7 @@ export const getProjectDetails = ({ id }: { id: string | string[] }) => {
   return { data, projectIsLoading, error };
 };
 
-export const updateProjectName = () => {
+export const updateProjectNameMutation = () => {
   const fetcher = (
     url: string,
     { arg }: { arg: UpdateProjectNameDto }
@@ -49,14 +51,34 @@ export const updateProjectName = () => {
     return api.put(url, arg);
   };
 
-  const {
-    data,
-    trigger: updateName,
-    isMutating: loading,
-  } = useSWRMutation("/project/update-project-name", fetcher, {
-    onSuccess: () => {
-      location.reload();
-    },
-  });
-  return { data, updateName, loading };
+  const { trigger: updateProjectName, isMutating: loading } = useSWRMutation(
+    "/project/update-project-name",
+    fetcher,
+    {
+      onSuccess: () => {
+        location.reload();
+      },
+    }
+  );
+  return { updateProjectName, loading };
+};
+
+export const deleteProjectMutation = () => {
+  const router = useRouter();
+  const fetcher = (url: string, { arg }: { arg: ProjectIdDto }) => {
+    return api.delete(url, {
+      params: { projectId: arg.projectId },
+    });
+  };
+
+  const { trigger: deleteProject, isMutating: loading } = useSWRMutation(
+    "/project/delete-project",
+    fetcher,
+    {
+      onSuccess: () => {
+        router.push(ROUTES.PROJECTS);
+      },
+    }
+  );
+  return { deleteProject, loading };
 };

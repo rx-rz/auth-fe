@@ -1,14 +1,15 @@
 "use client";
 import { useParams } from "next/navigation";
-import { getProjectDetails } from "../../_core/swr";
 import { Button } from "@/components/ui/button";
 import { Check, PenBox, Trash2Icon } from "lucide-react";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { EditProjectNameDialog } from "../containers/edit-project-name-dialog";
+import { getProjectDetailsQuery } from "../../_core/swr";
+import { DeleteProjectDialog } from "../containers/delete-project-dialog";
 const ProjectDetailsPage = () => {
   const { id } = useParams();
-  const { data } = getProjectDetails({ id });
+  const { data } = getProjectDetailsQuery({ id });
   const [allowEdit, setAllowEdit] = useState(false);
   const [newName, setNewName] = useState("");
   return (
@@ -43,9 +44,10 @@ const ProjectDetailsPage = () => {
             Created {new Date(data?.project.createdAt!).toDateString()}
           </p>
         </div>
-        <Button variant={"destructive"} size={"icon"}>
-          <Trash2Icon />{" "}
-        </Button>
+        <DeleteProjectDialog
+          name={data?.project.name ?? ""}
+          projectId={data?.project.id ?? ""}
+        />
       </div>
     </div>
   );

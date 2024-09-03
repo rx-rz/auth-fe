@@ -2,14 +2,15 @@
 import { ROUTES } from "@/lib/routes";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
-import { getAdminProjects } from "../_core/swr";
+
 import { ProjectCard } from "./components/project-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/components/ui/use-toast";
 import { useEffect } from "react";
+import { getAdminProjectsQuery } from "../_core/swr";
 
 const ProjectsPage = () => {
-  const { data, error, projectsIsLoading } = getAdminProjects();
+  const { data, error, projectsIsLoading } = getAdminProjectsQuery();
   const { toast } = useToast();
   useEffect(() => {
     toast({

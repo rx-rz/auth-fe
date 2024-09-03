@@ -2,46 +2,63 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Check, MoreHorizontal } from "lucide-react";
+import { Check, MoreHorizontal, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { deleteProjectMutation } from "../../_core/swr";
 
-export const DeleteProjectDialog = ({ projectId }: { projectId: string }) => {
-  const [open, setOpen] = useState(false);
+export const DeleteProjectDialog = ({
+  name,
+  projectId,
+}: {
+  name: string;
+  projectId: string;
+}) => {
+  const [inputtedName, setInputtedName] = useState("");
+  const { deleteProject, loading } = deleteProjectMutation();
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className="bg-black items-center px-3 h-[2.8rem] justify-center flex">
-        <Check stroke="white" />
+    <Dialog>
+      <DialogTrigger className="bg-red-500 items-center px-3 h-[2.8rem] justify-center flex">
+        <Trash2Icon stroke="white" />
       </DialogTrigger>
-      <DialogContent className="font-satoshi">
-        <DialogHeader className="mb-6 mt-3 text-xl">
-          <p>
+      <DialogContent className="font-satoshi w-full max-w-[320px]">
+        <DialogHeader className="mb-2 mt-8">
+          <h3 className="text-center text-xl font-bold">
             Are you sure you want to delete this project?
-            {/* <span className="font-bold inline">{name}</span> */}
+          </h3>
+          <p className="  text-center mt-3">
+            If you want to delete this project, type{" "}
+            <span className="text-red-500 font-bold">{name}</span> in the input
+            box below:
           </p>
         </DialogHeader>
-        <DialogFooter>
-          <DialogClose className="mr-3">No</DialogClose>
-          {/* <Button
+        <DialogDescription>
+          <Input
+            value={inputtedName}
+            variant={"default"}
+            onChange={(e) => setInputtedName(e.target.value)}
+          />
+          <Button
+            variant={"destructive"}
+            className="w-full mt-4"
             onClick={() => {
-              updateName({
-                name,
-                projectId,
-              });
+              deleteProject({ projectId });
             }}
-            className="text-lg"
+            disabled={name !== inputtedName}
           >
             {loading ? (
-              <MoreHorizontal className="animate-bounce" size={30} />
+              <MoreHorizontal size={30} className="animate-bounce" />
             ) : (
-              "Yes, Update"
+              "Delete"
             )}
-          </Button> */}
-        </DialogFooter>
+          </Button>
+        </DialogDescription>
       </DialogContent>
     </Dialog>
   );

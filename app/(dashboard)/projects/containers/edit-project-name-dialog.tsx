@@ -7,9 +7,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Check, MoreHorizontal } from "lucide-react";
-import { updateProjectName } from "../../_core/swr";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { updateProjectNameMutation } from "../../_core/swr";
 
 export const EditProjectNameDialog = ({
   projectId,
@@ -19,7 +19,7 @@ export const EditProjectNameDialog = ({
   name: string;
 }) => {
   const [open, setOpen] = useState(false);
-  const { updateName, loading } = updateProjectName();
+  const { updateProjectName, loading } = updateProjectNameMutation();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -37,7 +37,7 @@ export const EditProjectNameDialog = ({
           <DialogClose className="mr-3">No</DialogClose>
           <Button
             onClick={() => {
-              updateName({
+              updateProjectName({
                 name,
                 projectId,
               });
