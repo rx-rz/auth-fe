@@ -4,6 +4,7 @@ import {
   GetAdminProjectsResponse,
   GetProjectResponse,
   GetProjectRolesResponse,
+  GetRoleDetailsResponse,
   UpdateProjectNameResponse,
 } from "./response-types";
 import useSWR from "swr";
@@ -157,6 +158,30 @@ export const updateRoleNameMutation = () => {
   return { updateRoleName, updateRoleNameIsLoading };
 };
 
+export const getRoleDetailsQuery = ({ roleId }: { roleId: string }) => {
+  const { toast } = useToast();
+  const fetcher = (url: string): Promise<GetRoleDetailsResponse> => {
+    return api.get(url, {
+      params: {
+        roleId,
+      },
+    });
+  };
+
+  const { data, isLoading } = useSWR("/role/get-role-details", fetcher, {
+    onError: (error) => {
+      if (error instanceof APIError) {
+        toast({
+          variant: "destructive",
+          title: error?.error,
+        });
+      }
+    },
+  });
+
+  return { data, isLoading };
+};
+
 export const deleteRoleMutation = ({ roleId }: { roleId: string }) => {
   const { toast } = useToast();
   const fetcher = (url: string) => {
@@ -239,8 +264,6 @@ export const deletePermissionMutation = ({
     });
   return { deletePermission, deletePermissionIsLoading };
 };
-
-
 
 export const assignPermissionToRoleMutation = () => {
   const { toast } = useToast();

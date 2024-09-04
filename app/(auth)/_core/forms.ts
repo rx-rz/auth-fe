@@ -2,13 +2,7 @@ import {
   startAuthentication,
   startRegistration,
 } from "@simplewebauthn/browser";
-import {
-  LoginAdminDto,
-  LoginAdminSchema,
-  RegisterAdminDto,
-  RegisterAdminSchema,
-  ResetAdminPasswordDto,
-} from "@/schemas/admin.schemas";
+import * as FormTypes from "@/schemas/admin.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -23,42 +17,34 @@ import {
 import { useRouter } from "next/navigation";
 import { decodeUserToken, User } from "@/lib/utils";
 import { useUserStore } from "@/store/user.store";
-import { toast, useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { ROUTES } from "@/lib/routes";
+import { useThrowToast } from "@/lib/hooks";
 
 export const useRegister = () => {
   const router = useRouter();
+  const { throwToast } = useThrowToast();
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
-  const registerAdminForm = useForm<RegisterAdminDto>({
-    resolver: zodResolver(RegisterAdminSchema),
-    defaultValues: {
-      confirmPassword: "",
-      email: "",
-      firstName: "",
-      lastName: "",
-      password: "",
-    },
+  const registerAdminForm = useForm<FormTypes.RegisterAdminDto>({
+    resolver: zodResolver(FormTypes.RegisterAdminSchema),
   });
 
-  async function submitRegisterAdminForm(values: RegisterAdminDto) {
+  const submitRegisterAdminForm = async (
+    values: FormTypes.RegisterAdminDto
+  ) => {
     setLoading(true);
     const { error, response } = await registerAdmin(values);
     if (response && response.success) {
-      toast({
-        title: "Admin registered successfully",
-      });
+      throwToast({ title: "Admin registered successfully" });
       router.push(ROUTES.LOGIN);
     }
     if (error) {
-      toast({
-        variant: "destructive",
-        title: error?.error,
+      throwToast({
+        error,
       });
     }
     setLoading(false);
-  }
+  };
 
   return { registerAdminForm, loading, submitRegisterAdminForm };
 };
@@ -67,32 +53,31 @@ export const useLogin = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { setUser } = useUserStore();
-  const { toast } = useToast();
-  const loginAdminForm = useForm<LoginAdminDto>({
-    resolver: zodResolver(LoginAdminSchema),
+  const { throwToast } = useThrowToast();
+  const loginAdminForm = useForm<FormTypes.LoginAdminDto>({
+    resolver: zodResolver(FormTypes.LoginAdminSchema),
   });
 
-  async function submitLoginAdminForm(values: LoginAdminDto) {
+  const submitLoginAdminForm = async (values: FormTypes.LoginAdminDto) => {
     setLoading(true);
     const { response, error } = await loginAdmin(values);
     if (response && response.success) {
       const user: User | undefined = decodeUserToken(response.accessToken);
       if (user) {
         setUser(user);
-        toast({
+        throwToast({
           title: "Login successful",
         });
         router.push(ROUTES.MFA);
       }
     }
     if (error) {
-      toast({
-        variant: "destructive",
-        title: error?.error,
+      throwToast({
+        error,
       });
     }
     setLoading(false);
-  }
+  };
 
   return { loginAdminForm, loading, submitLoginAdminForm };
 };
@@ -101,17 +86,17 @@ export const useMFA = () => {
   const { user, setUser } = useUserStore();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
-  async function triggerWebMFARegistration() {
+  const { throwToast } = useThrowToast();
+
+  const triggerWebMFARegistration = async () => {
     setLoading(true);
     if (user) {
       const { response, error } = await getMfaRegistrationOptions(
         user.email ?? ""
       );
       if (error) {
-        toast({
-          variant: "destructive",
-          title: error?.error,
+        throwToast({
+          error,
         });
       }
       if (response?.success) {
@@ -123,24 +108,23 @@ export const useMFA = () => {
             webAuthnUserId: response.options.user.id,
           });
         if (verificationResponse?.success) {
-          toast({
+          throwToast({
             title: "Passkey registration successful",
           });
           setUser({ ...user, mfaEnabled: true });
           router.push(ROUTES.PROJECTS);
         }
         if (error) {
-          toast({
-            variant: "destructive",
-            title: error?.error,
+          throwToast({
+            error,
           });
         }
       }
     }
     setLoading(false);
-  }
+  };
 
-  async function triggerWebMFAAuthentication() {
+  const triggerWebMFAAuthentication = async () => {
     setLoading(true);
     if (user) {
       const { response, error } = await getMfaAuthenticationOptions(
@@ -148,9 +132,8 @@ export const useMFA = () => {
       );
       if (error) {
         if (error) {
-          toast({
-            variant: "destructive",
-            title: error?.error,
+          throwToast({
+            error,
           });
         }
       }
@@ -164,39 +147,47 @@ export const useMFA = () => {
             options: authenticationResponse,
           });
         if (verificationResponse?.success) {
-          toast({
+          throwToast({
             title: "Passkey verification successful",
           });
           router.push(ROUTES.PROJECTS);
         }
         if (error) {
-          toast({
-            variant: "destructive",
-            title: error?.error,
+          throwToast({
+            error,
           });
         }
       }
     }
     setLoading(false);
-  }
+  };
   return { loading, triggerWebMFARegistration, triggerWebMFAAuthentication };
 };
-////
+
+export const useForgotPassword = () => {
+  const forgotPasswordForm = useForm<FormTypes.AdminEmailDto>({
+    resolver: zodResolver(FormTypes.AdminEmailSchema),
+  });
+
+  const submitForgotPasswordForm = ({ email }: FormTypes.AdminEmailDto) => {
+    sessionStorage.setItem("email-for-password-reset", email);
+  };
+
+  return { forgotPasswordForm, submitForgotPasswordForm };
+};
 
 export const useResetPassword = () => {
-  const { toast } = useToast();
+  const { throwToast } = useThrowToast();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const resetPasswordForm = useForm<ResetAdminPasswordDto>({
-    defaultValues: {
-      confirmPassword: "",
-      email: "",
-      newPassword: "",
-    },
+  const resetPasswordForm = useForm<FormTypes.ResetAdminPasswordDto>({
+    resolver: zodResolver(FormTypes.ResetAdminPasswordSchema),
   });
 
-  async function submitResetUserPasswordForm(values: ResetAdminPasswordDto) {
+  const submitResetUserPasswordForm = async (
+    values: FormTypes.ResetAdminPasswordDto
+  ) => {
     setLoading(true);
     const { email, newPassword } = values;
     const { error, response } = await resetAdminPassword({
@@ -204,19 +195,18 @@ export const useResetPassword = () => {
       newPassword,
     });
     if (error) {
-      toast({
-        title: error?.error,
-        variant: "destructive",
+      throwToast({
+        error,
       });
     }
     if (response && response.success) {
-      toast({
+      throwToast({
         title: "Password reset successfully",
       });
       router.push(ROUTES.LOGIN);
     }
     setLoading(false);
-  }
+  };
 
   return { loading, resetPasswordForm, submitResetUserPasswordForm };
 };

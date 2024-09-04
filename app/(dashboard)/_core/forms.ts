@@ -24,7 +24,6 @@ import {
   CreateProjectDto,
   CreateProjectSchema,
 } from "@/schemas/project.schemas";
-import { CreateProjectResponse } from "./response-types";
 
 export const useUpdateAdminEmail = () => {
   const [loading, setLoading] = useState(false);

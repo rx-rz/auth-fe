@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { APIError } from "./errors";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -22,4 +23,17 @@ export function decodeUserToken(token: string | undefined) {
     ) as User;
     return user;
   }
+}
+
+export async function handleApiCall<T>(
+  apiCall: Promise<T>
+): Promise<{ error: APIError | undefined; response: T | undefined }> {
+  let error;
+  let response: T | undefined;
+  try {
+    response = await apiCall;
+  } catch (err) {
+    if (err instanceof APIError) error = err;
+  }
+  return { error, response };
 }
