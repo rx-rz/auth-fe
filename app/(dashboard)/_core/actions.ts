@@ -7,6 +7,7 @@ import {
 } from "@/schemas/admin.schemas";
 import {
   CreateProjectResponse,
+  CreateRoleResponse,
   DeleteProjectResponse,
   GetAllProjectsCreatedByAdminResponse,
   GetProjectKeysResponse,
@@ -23,6 +24,7 @@ import {
   ProjectIdDto,
   UpdateProjectNameDto,
 } from "@/schemas/project.schemas";
+import { CreateRoleDto } from "@/schemas/rbac.schemas";
 
 // ADMIN
 
@@ -132,4 +134,15 @@ export async function deleteProject({ projectId }: ProjectIdDto) {
     if (err instanceof APIError) error = err;
   }
   return { error, response };
+}
+
+export async function createRole(body: CreateRoleDto){
+  let error;
+  let response: CreateRoleResponse | undefined;
+  try{
+    response = await api.post('/role/create-role', body)
+  }catch(err){
+    if(err instanceof APIError) error = err;
+  }
+  return {error, response}
 }

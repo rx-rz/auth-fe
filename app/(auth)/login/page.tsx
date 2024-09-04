@@ -10,7 +10,6 @@ import {
 import { useLogin } from "../_core/forms";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/ui/logo";
 import { ROUTES } from "@/lib/routes";
 import Link from "next/link";
 import { MoreHorizontal } from "lucide-react";

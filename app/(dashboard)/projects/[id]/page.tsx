@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { EditProjectNameDialog } from "../containers/edit-project-name-dialog";
 import { getProjectDetailsQuery } from "../../_core/swr";
 import { DeleteProjectDialog } from "../containers/delete-project-dialog";
+import { Separator } from "@/components/ui/separator";
 const ProjectDetailsPage = () => {
   const { id } = useParams();
   const { data } = getProjectDetailsQuery({ id });
@@ -49,6 +50,7 @@ const ProjectDetailsPage = () => {
           projectId={data?.project.id ?? ""}
         />
       </div>
+      <Separator className="my-4" />
     </div>
   );
 };

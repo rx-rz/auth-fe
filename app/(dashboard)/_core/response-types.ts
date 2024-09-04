@@ -109,6 +109,8 @@ export type GetProjectRolesResponse = {
   roles: {
     id: string;
     name: string;
+    createdAt: Date;
+    updatedAt: Date;
     rolePermissions: {
       permission: {
         id: string;
@@ -119,4 +121,46 @@ export type GetProjectRolesResponse = {
       };
     }[];
   }[];
+};
+
+export type CreateRoleResponse = {
+  success: boolean;
+  role: {
+    id: string;
+    name: string;
+    projectId: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+};
+
+export type GetRoleDetailsResponse = {
+  success: boolean;
+  role: {
+    id: string;
+    name: string;
+    projectId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    rolePermissions: {
+      roleId: string;
+      permissionId: string;
+    }[];
+  } | null;
+};
+
+export type UpdateRoleNameResponse = {
+  success: boolean;
+  role: {
+    id: string;
+    name: string;
+    projectId: string;
+    createdAt: Date;
+    updatedAt: Date;
+  };
+};
+
+export type DeleteRoleResponse = {
+  success: boolean;
+  role: any;
 };
