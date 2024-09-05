@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useUpdateProjectName } from "../forms";
+import { useUpdateProjectName } from "../mutations";
 import ConfirmationDialog from "@/components/confirmation-dialog";
 import { Input } from "@/components/ui/input";
 type Props = {

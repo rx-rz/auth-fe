@@ -7,7 +7,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useRegister } from "../_core/forms";
+import { useRegister } from "../_core/mutations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";

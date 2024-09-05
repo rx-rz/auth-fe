@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ProjectApiKey } from "../_containers/project-api-key";
 import { LoadingIcon } from "@/components/loading-icon";
-import { useCreateNewProject } from "../forms";
+import { useCreateNewProject } from "../mutations";
 
 const NewProjectPage = () => {
   const { loading, success, keys, form, submitCreateNewProjectForm } =

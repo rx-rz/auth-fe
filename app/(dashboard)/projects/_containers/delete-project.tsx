@@ -1,10 +1,7 @@
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
-  DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
@@ -14,7 +11,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { useDeleteProject } from "../forms";
+import { useDeleteProject } from "../mutations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoadingIcon } from "@/components/loading-icon";

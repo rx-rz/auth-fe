@@ -12,12 +12,22 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   createProject,
+  createRole,
   deleteProject,
+  deleteRole,
   getProjectKeys,
   updateProjectName,
+  updateRoleName,
 } from "./actions";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
+import {
+  CreateRoleDto,
+  CreateRoleSchema,
+  RoleNameSchema,
+  UpdateRoleNameDto,
+  UpdateRoleNameSchema,
+} from "@/schemas/rbac.schemas";
 
 export const useCreateNewProject = () => {
   const { showToast } = useShowToast();
@@ -101,4 +111,63 @@ export const useDeleteProject = ({ projectId }: { projectId: string }) => {
     }
   };
   return { loading, form, submitDeleteProjectForm };
+};
+
+export const useCreateRole = ({ projectId }: { projectId: string }) => {
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useShowToast();
+  const form = useForm<CreateRoleDto>({
+    resolver: zodResolver(RoleNameSchema),
+  });
+
+  const submitCreateRoleForm = async (body: CreateRoleDto) => {
+    setLoading(true);
+    const { error, response } = await createRole({ ...body, projectId });
+    if (error) {
+      showToast({ error });
+    }
+    if (response && response.success) {
+      location.reload();
+    }
+  };
+
+  return { loading, form, submitCreateRoleForm };
+};
+
+export const useUpdateRoleName = () => {
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useShowToast();
+  const form = useForm<UpdateRoleNameDto>({
+    resolver: zodResolver(UpdateRoleNameSchema),
+  });
+
+  const submitUpdateRoleNameForm = async (body: UpdateRoleNameDto) => {
+    setLoading(false);
+    const { error, response } = await updateRoleName(body);
+    if (error) {
+      showToast({ error });
+    }
+    if (response && response.success) {
+      location.reload();
+    }
+  };
+  return { loading, form, submitUpdateRoleNameForm };
+};
+
+export const useDeleteRole = () => {
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useShowToast();
+
+  const deleteRoleMutation = async ({ roleId }: { roleId: string }) => {
+    setLoading(true);
+    const { error, response } = await deleteRole({ roleId });
+    if (error) {
+      showToast({ error });
+    }
+    if (response && response.success) {
+      location.reload();
+    }
+    setLoading(false);
+  };
+  return { loading, deleteRoleMutation };
 };

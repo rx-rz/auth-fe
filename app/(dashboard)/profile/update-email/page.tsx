@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useUpdateAdminEmail } from "../forms";
+import { useUpdateAdminEmail } from "../mutations";
 import { LoadingIcon } from "@/components/loading-icon";
 
 const UpdateEmailPage = () => {

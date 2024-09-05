@@ -1,7 +1,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { CreateRoleDialog } from "../../_containers/create-role-dialog";
 import { getProjectRolesQuery } from "@/app/(dashboard)/_core/swr";
 import { Card, CardFooter } from "@/components/ui/card";
 import { ArrowDown, Trash2Icon } from "lucide-react";
@@ -16,7 +15,6 @@ const ProjectRolesPage = () => {
   return (
     <div>
       <h1 className="font-bold text-3xl">Roles</h1>
-      <CreateRoleDialog projectId={id as string} />
       <div className="grid grid-cols-4 gap-4 mt-4">
         {data && data.roles.map((role) => <RoleCard role={role} />)}
       </div>

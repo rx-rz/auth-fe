@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/store/user.store";
-import { useUpdateAdminPassword } from "../forms";
+import { useUpdateAdminPassword } from "../mutations";
 import { LoadingIcon } from "@/components/loading-icon";
 const UpdatePasswordPage = () => {
   const { form, loading, submitUpdateAdminPasswordForm } =

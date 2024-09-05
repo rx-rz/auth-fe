@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { useMFA } from "../_core/forms";
+import { useMFA } from "../_core/mutations";
 import { useUserStore } from "@/store/user.store";
 import { FingerprintIcon, InfoIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";

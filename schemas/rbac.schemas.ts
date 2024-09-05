@@ -7,6 +7,12 @@ export const CreateRoleSchema = z.object({
   projectId: z.string({ required_error: "Project ID is required" }),
 });
 
+export const RoleNameSchema = z.object({
+  name: z
+    .string({ required_error: "Role name is required" })
+    .max(50, "Role name cannot be longer than 255 characters"),
+});
+
 export type CreateRoleDto = z.infer<typeof CreateRoleSchema>;
 
 export const RoleIDSchema = z.object({

@@ -1,5 +1,5 @@
 "use client";
-import { useResetPassword } from "../_core/forms";
+import { useResetPassword } from "../_core/mutations";
 import {
   Form,
   FormControl,

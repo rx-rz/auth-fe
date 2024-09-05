@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { DeleteProject } from "../../_containers/delete-project";
 import { getProjectDetailsQuery } from "../../queries";
 import { useParams } from "next/navigation";
+import { CreateRole } from "../../_containers/create-role";
 
 const ProjectSettingsPage = () => {
   const { id } = useParams();
@@ -37,7 +38,9 @@ const ProjectSettingsPage = () => {
           />
         </div>
       </TabsContent>
-      <TabsContent value="rbac">Change your password here.</TabsContent>
+      <TabsContent value="rbac">
+        <CreateRole projectId={project?.id ?? ""} />
+      </TabsContent>
     </Tabs>
   );
 };
