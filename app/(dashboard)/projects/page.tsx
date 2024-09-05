@@ -2,22 +2,12 @@
 import { ROUTES } from "@/lib/routes";
 import { PlusIcon } from "lucide-react";
 import Link from "next/link";
-
-import { ProjectCard } from "./components/project-card";
+import { ProjectCard } from "./_components/project-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useToast } from "@/components/ui/use-toast";
-import { useEffect } from "react";
-import { getAdminProjectsQuery } from "../_core/swr";
+import { getAdminProjectsQuery } from "./queries";
 
 const ProjectsPage = () => {
-  const { data, error, projectsIsLoading } = getAdminProjectsQuery();
-  const { toast } = useToast();
-  useEffect(() => {
-    toast({
-      title: error?.error ?? "Error occured",
-      variant: "destructive",
-    });
-  }, [error]);
+  const { projects, projectsIsLoading } = getAdminProjectsQuery();
   return (
     <div>
       <h1 className="text-2xl mt-1 opacity-80 font-bold mb-8">Projects</h1>
@@ -44,8 +34,8 @@ const ProjectsPage = () => {
         ) : (
           <></>
         )}
-        {data?.adminProjects ? (
-          data.adminProjects.map((project) => <ProjectCard project={project} />)
+        {projects ? (
+          projects.map((project) => <ProjectCard project={project} />)
         ) : (
           <></>
         )}

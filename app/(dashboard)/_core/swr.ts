@@ -17,43 +17,10 @@ import {
   AssignPermissionToRoleDto,
   CreatePermissionDto,
   CreateRoleDto,
-  RoleIdDto,
   UpdateRoleNameDto,
 } from "@/schemas/rbac.schemas";
 import { useToast } from "@/components/ui/use-toast";
 import { APIError } from "@/lib/errors";
-
-export const getAdminProjectsQuery = () => {
-  const { user } = useUserStore();
-
-  const fetcher = (url: string): Promise<GetAdminProjectsResponse> => {
-    return api.get(url, {
-      params: { email: user.email },
-    });
-  };
-  const {
-    data,
-    isLoading: projectsIsLoading,
-    error,
-  } = useSWR(user.email ? "/admin/get-projects" : null, fetcher);
-  console.log({ data, error });
-  return { data, projectsIsLoading, error };
-};
-
-export const getProjectDetailsQuery = ({ id }: { id: string | string[] }) => {
-  const fetcher = (url: string): Promise<GetProjectResponse> => {
-    return api.get(url, {
-      params: { projectId: id },
-    });
-  };
-  const {
-    data,
-    isLoading: projectIsLoading,
-    error,
-  } = useSWR(id ? "/project/get-project" : null, fetcher);
-
-  return { data, projectIsLoading, error };
-};
 
 export const updateProjectNameMutation = () => {
   const fetcher = (

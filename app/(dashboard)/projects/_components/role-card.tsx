@@ -20,6 +20,7 @@ import {
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { LoadingIcon } from "@/components/loading-icon";
 
 type Role = {
   role: {
@@ -89,11 +90,7 @@ const DeleteRoleDialog = ({
               deleteRole();
             }}
           >
-            {deleteRoleIsLoading ? (
-              <MoreHorizontal className="animate-bounce" size={30} />
-            ) : (
-              "Yes, Delete"
-            )}
+            {deleteRoleIsLoading ? <LoadingIcon /> : "Yes, Delete"}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -143,4 +140,3 @@ const EditRoleNameDialog = ({
     </Dialog>
   );
 };
-

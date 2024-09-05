@@ -7,17 +7,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useUpdateAdminEmail } from "../../_core/forms";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { useUpdateAdminEmail } from "../forms";
+import { LoadingIcon } from "@/components/loading-icon";
 
 const UpdateEmailPage = () => {
-  const {
-    updateAdminEmailForm: form,
-    loading,
-    submitUpdateAdminEmailForm,
-  } = useUpdateAdminEmail();
+  const { form, loading, submitUpdateAdminEmailForm } = useUpdateAdminEmail();
   return (
     <div className="">
       <h1 className="text-2xl font-bold opacity-90">Update Admin Email</h1>
@@ -77,11 +73,7 @@ const UpdateEmailPage = () => {
             )}
           />
           <Button className="w-full mt-10" type="submit">
-            {loading ? (
-              <MoreHorizontal size={20} className="animate-bounce" />
-            ) : (
-              <>Update Email</>
-            )}
+            {loading ? <LoadingIcon /> : <>Update Email</>}
           </Button>
         </form>
       </Form>

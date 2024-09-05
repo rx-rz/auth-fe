@@ -1,5 +1,4 @@
 "use client";
-import { useUpdateAdminDetails } from "../../_core/forms";
 import {
   Form,
   FormControl,
@@ -10,14 +9,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
+import { useUpdateAdminDetails } from "../forms";
+import { LoadingIcon } from "@/components/loading-icon";
 
 const UpdateDetailsPage = () => {
-  const {
-    updateAdminDetailsForm: form,
-    loading,
-    submitUpdateAdminDetailsForm,
-  } = useUpdateAdminDetails();
+  const { form, loading, submitUpdateAdminDetailsForm } =
+    useUpdateAdminDetails();
   return (
     <div className="">
       <h1 className="text-2xl font-bold opacity-90">Update Details</h1>
@@ -36,7 +33,6 @@ const UpdateDetailsPage = () => {
                   <Input
                     placeholder="adeleyetemiloluwa.work@gmail.com"
                     className=""
-
                     {...field}
                     type="email"
                   />
@@ -73,11 +69,7 @@ const UpdateDetailsPage = () => {
           />
 
           <Button className="w-full mt-10" type="submit">
-            {loading ? (
-              <MoreHorizontal size={20} className="animate-bounce" />
-            ) : (
-              <>Update Details</>
-            )}
+            {loading ? <LoadingIcon /> : <>Update Details</>}
           </Button>
         </form>
       </Form>

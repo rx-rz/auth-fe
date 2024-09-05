@@ -19,11 +19,11 @@ import { decodeUserToken, User } from "@/lib/utils";
 import { useUserStore } from "@/store/user.store";
 import { useState } from "react";
 import { ROUTES } from "@/lib/routes";
-import { useThrowToast } from "@/lib/hooks";
+import { useShowToast } from "@/lib/hooks";
 
 export const useRegister = () => {
   const router = useRouter();
-  const { throwToast } = useThrowToast();
+  const { showToast } = useShowToast();
   const [loading, setLoading] = useState(false);
   const registerAdminForm = useForm<FormTypes.RegisterAdminDto>({
     resolver: zodResolver(FormTypes.RegisterAdminSchema),
@@ -35,11 +35,11 @@ export const useRegister = () => {
     setLoading(true);
     const { error, response } = await registerAdmin(values);
     if (response && response.success) {
-      throwToast({ title: "Admin registered successfully" });
+      showToast({ title: "Admin registered successfully" });
       router.push(ROUTES.LOGIN);
     }
     if (error) {
-      throwToast({
+      showToast({
         error,
       });
     }
@@ -53,7 +53,7 @@ export const useLogin = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { setUser } = useUserStore();
-  const { throwToast } = useThrowToast();
+  const { showToast } = useShowToast();
   const loginAdminForm = useForm<FormTypes.LoginAdminDto>({
     resolver: zodResolver(FormTypes.LoginAdminSchema),
   });
@@ -65,14 +65,14 @@ export const useLogin = () => {
       const user: User | undefined = decodeUserToken(response.accessToken);
       if (user) {
         setUser(user);
-        throwToast({
+        showToast({
           title: "Login successful",
         });
         router.push(ROUTES.MFA);
       }
     }
     if (error) {
-      throwToast({
+      showToast({
         error,
       });
     }
@@ -86,7 +86,7 @@ export const useMFA = () => {
   const { user, setUser } = useUserStore();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { throwToast } = useThrowToast();
+  const { showToast } = useShowToast();
 
   const triggerWebMFARegistration = async () => {
     setLoading(true);
@@ -95,7 +95,7 @@ export const useMFA = () => {
         user.email ?? ""
       );
       if (error) {
-        throwToast({
+        showToast({
           error,
         });
       }
@@ -108,14 +108,14 @@ export const useMFA = () => {
             webAuthnUserId: response.options.user.id,
           });
         if (verificationResponse?.success) {
-          throwToast({
+          showToast({
             title: "Passkey registration successful",
           });
           setUser({ ...user, mfaEnabled: true });
           router.push(ROUTES.PROJECTS);
         }
         if (error) {
-          throwToast({
+          showToast({
             error,
           });
         }
@@ -132,7 +132,7 @@ export const useMFA = () => {
       );
       if (error) {
         if (error) {
-          throwToast({
+          showToast({
             error,
           });
         }
@@ -147,13 +147,13 @@ export const useMFA = () => {
             options: authenticationResponse,
           });
         if (verificationResponse?.success) {
-          throwToast({
+          showToast({
             title: "Passkey verification successful",
           });
           router.push(ROUTES.PROJECTS);
         }
         if (error) {
-          throwToast({
+          showToast({
             error,
           });
         }
@@ -177,7 +177,7 @@ export const useForgotPassword = () => {
 };
 
 export const useResetPassword = () => {
-  const { throwToast } = useThrowToast();
+  const { showToast } = useShowToast();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -195,12 +195,12 @@ export const useResetPassword = () => {
       newPassword,
     });
     if (error) {
-      throwToast({
+      showToast({
         error,
       });
     }
     if (response && response.success) {
-      throwToast({
+      showToast({
         title: "Password reset successfully",
       });
       router.push(ROUTES.LOGIN);

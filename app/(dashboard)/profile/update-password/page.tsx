@@ -1,5 +1,4 @@
 "use client";
-import { useUpdateAdminPassword } from "../../_core/forms";
 import {
   Form,
   FormControl,
@@ -10,14 +9,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
 import { useUserStore } from "@/store/user.store";
+import { useUpdateAdminPassword } from "../forms";
+import { LoadingIcon } from "@/components/loading-icon";
 const UpdatePasswordPage = () => {
-  const {
-    updateAdminPasswordForm: form,
-    loading,
-    submitUpdateAdminPasswordForm,
-  } = useUpdateAdminPassword();
+  const { form, loading, submitUpdateAdminPasswordForm } =
+    useUpdateAdminPassword();
   const { user } = useUserStore();
   return (
     <div className="">
@@ -73,11 +70,7 @@ const UpdatePasswordPage = () => {
             )}
           />
           <Button className="w-full mt-10 shadow-inner" type="submit">
-            {loading ? (
-              <MoreHorizontal size={20} className="animate-bounce" />
-            ) : (
-              <>Update Password</>
-            )}
+            {loading ? <LoadingIcon /> : <>Update Password</>}
           </Button>
         </form>
       </Form>

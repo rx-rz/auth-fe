@@ -10,9 +10,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/ui/logo";
-import { MoreHorizontal } from "lucide-react";
 import { FormHeader } from "../components/form-header";
+import { LoadingIcon } from "@/components/loading-icon";
 
 const ResetPasswordPage = () => {
   const {
@@ -77,7 +76,7 @@ const ResetPasswordPage = () => {
           )}
         />
         <Button className="w-full mt-10" type="submit">
-          {loading ? <MoreHorizontal size={30} /> : "Reset Password"}
+          {loading ? <LoadingIcon/> : "Reset Password"}
         </Button>
       </form>
     </Form>

@@ -1,12 +1,12 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { CreateRoleDialog } from "../../containers/create-role-dialog";
+import { CreateRoleDialog } from "../../_containers/create-role-dialog";
 import { getProjectRolesQuery } from "@/app/(dashboard)/_core/swr";
 import { Card, CardFooter } from "@/components/ui/card";
 import { ArrowDown, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { RoleCard } from "../../components/role-card";
+import { RoleCard } from "../../_components/role-card";
 
 const ProjectRolesPage = () => {
   const { id } = useParams();

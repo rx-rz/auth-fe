@@ -2,9 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { useMFA } from "../_core/forms";
 import { useUserStore } from "@/store/user.store";
-import { FingerprintIcon, InfoIcon, MoreHorizontal } from "lucide-react";
+import { FingerprintIcon, InfoIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { FormHeader } from "../components/form-header";
+import { LoadingIcon } from "@/components/loading-icon";
 
 const MFAPage = () => {
   const { user } = useUserStore();
@@ -34,7 +35,7 @@ const MFAPage = () => {
         }}
       >
         {loading ? (
-          <MoreHorizontal size={20} className="animate-bounce" />
+          <LoadingIcon />
         ) : (
           <>
             <FingerprintIcon />

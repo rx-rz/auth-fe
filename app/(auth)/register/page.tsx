@@ -10,11 +10,11 @@ import {
 import { useRegister } from "../_core/forms";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/ui/logo";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
 import { FormHeader } from "../components/form-header";
+import { LoadingIcon } from "@/components/loading-icon";
 const RegisterPage = () => {
   const {
     registerAdminForm: form,
@@ -100,11 +100,7 @@ const RegisterPage = () => {
           )}
         />
         <Button className="w-full mt-10" type="submit">
-          {loading ? (
-            <MoreHorizontal size={20} className="animate-bounce" />
-          ) : (
-            "Register"
-          )}
+          {loading ? <LoadingIcon /> : "Register"}
         </Button>
       </form>
       <p className="text-center mt-2 text-sm">

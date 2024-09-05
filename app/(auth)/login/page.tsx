@@ -12,8 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
 import Link from "next/link";
-import { MoreHorizontal } from "lucide-react";
 import { FormHeader } from "../components/form-header";
+import { LoadingIcon } from "@/components/loading-icon";
 
 const LoginPage = () => {
   const { loginAdminForm: form, loading, submitLoginAdminForm } = useLogin();
@@ -65,7 +65,7 @@ const LoginPage = () => {
           )}
         />
         <Button className="w-full mt-10" type="submit">
-          {loading ? <MoreHorizontal size={30} /> : "Log In"}
+          {loading ? <LoadingIcon /> : "Log In"}
         </Button>
       </form>
       <p className="text-center mt-2 text-sm">

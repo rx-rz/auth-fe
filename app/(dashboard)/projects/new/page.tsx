@@ -7,21 +7,15 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useCreateNewProject } from "../../_core";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
-import { ProjectApiKey } from "./containers/project-api-key";
+import { ProjectApiKey } from "../_containers/project-api-key";
+import { LoadingIcon } from "@/components/loading-icon";
+import { useCreateNewProject } from "../forms";
 
 const NewProjectPage = () => {
-  const {
-    loading,
-    success,
-    apiKey,
-    clientKey,
-    createNewProjectForm: form,
-    submitCreateNewProjectForm,
-  } = useCreateNewProject();
+  const { loading, success, keys, form, submitCreateNewProjectForm } =
+    useCreateNewProject();
 
   return (
     <div className="justify-evenly mt-10 max-w-[80%] mx-auto">
@@ -56,14 +50,14 @@ const NewProjectPage = () => {
               )}
             />
             <Button className="w-full" type="submit">
-              {loading ? <MoreHorizontal size={30} /> : "Create New Project"}
+              {loading ? <LoadingIcon /> : "Create New Project"}
             </Button>
           </form>
         </Form>
       </div>
 
       {success ? (
-        <ProjectApiKey apiKey={apiKey} clientKey={clientKey} />
+        <ProjectApiKey apiKey={keys.apiKey} clientKey={keys.clientKey} />
       ) : (
         <> </>
       )}

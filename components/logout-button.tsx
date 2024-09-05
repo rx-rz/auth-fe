@@ -1,10 +1,10 @@
 "use client";
-import { logoutAdmin } from "@/app/(dashboard)/_core/actions";
 import { Button } from "./ui/button";
 import { useUserStore } from "@/store/user.store";
 import { useToast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
+import { logoutAdmin } from "@/app/(dashboard)/profile/actions";
 
 export const LogoutButton = () => {
   const { setUser } = useUserStore();

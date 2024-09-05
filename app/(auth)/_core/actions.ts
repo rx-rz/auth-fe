@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios";
 import { LoginAdminDto, RegisterAdminDto } from "@/schemas/admin.schemas";
-import * as AuthResponseTypes from "./response-types";
+import * as ResponseTypes from "./response-types";
 import {
   AuthenticationResponseJSON,
   RegistrationResponseJSON,
@@ -8,28 +8,28 @@ import {
 import { CreateOtpDto, VerifyAdminOtpDto } from "@/schemas/otp.schemas";
 import { handleApiCall } from "@/lib/utils";
 
-export async function registerAdmin(body: RegisterAdminDto) {
+export const registerAdmin = async (body: RegisterAdminDto) => {
   const { confirmPassword, ...data } = body;
-  return handleApiCall<AuthResponseTypes.RegisterAdminResponse>(
+  return handleApiCall<ResponseTypes.RegisterAdminResponse>(
     api.post("/admin/register", data)
   );
-}
+};
 
-export async function loginAdmin(body: LoginAdminDto) {
-  return handleApiCall<AuthResponseTypes.LoginAdminReponse>(
+export const loginAdmin = async (body: LoginAdminDto) => {
+  return handleApiCall<ResponseTypes.LoginAdminReponse>(
     api.post("/admin/login", body)
   );
-}
+};
 
-export async function getMfaRegistrationOptions(email: string) {
-  return handleApiCall<AuthResponseTypes.GetMfaRegistrationOptionsResponse>(
+export const getMfaRegistrationOptions = async (email: string) => {
+  return handleApiCall<ResponseTypes.GetMfaRegistrationOptionsResponse>(
     api.get("/mfa/get-registration-options", {
       params: { email },
     })
   );
-}
+};
 
-export async function verifyMfaRegistrationOptions({
+export const verifyMfaRegistrationOptions = async ({
   email,
   options,
   webAuthnUserId,
@@ -37,51 +37,51 @@ export async function verifyMfaRegistrationOptions({
   email: string;
   options: RegistrationResponseJSON;
   webAuthnUserId: string;
-}) {
+}) => {
   const body = { email, options, webAuthnUserId };
-  return handleApiCall<AuthResponseTypes.VerifyMfaRegistrationResponse>(
+  return handleApiCall<ResponseTypes.VerifyMfaRegistrationResponse>(
     api.post("/mfa/verify-registration-options", body)
   );
-}
+};
 
-export async function getMfaAuthenticationOptions(email: string) {
-  return handleApiCall<AuthResponseTypes.GetMfaAuthenticationOptionsResponse>(
+export const getMfaAuthenticationOptions = async (email: string) => {
+  return handleApiCall<ResponseTypes.GetMfaAuthenticationOptionsResponse>(
     api.get("/mfa/get-authentication-options", {
       params: { email },
     })
   );
-}
+};
 
-export async function verifyMfaAuthenticationOptions({
+export const verifyMfaAuthenticationOptions = async ({
   email,
   options,
 }: {
   email: string;
   options: AuthenticationResponseJSON;
-}) {
+}) => {
   const body = { email, ...options };
-  return handleApiCall<AuthResponseTypes.VerifyMfaAuthenticationResponse>(
+  return handleApiCall<ResponseTypes.VerifyMfaAuthenticationResponse>(
     api.post("/mfa/verify-authentication-options", body)
   );
-}
+};
 
-export async function getOTP(body: CreateOtpDto) {
-  return handleApiCall<AuthResponseTypes.GetOTPResponse>(
+export const getOTP = async (body: CreateOtpDto) => {
+  return handleApiCall<ResponseTypes.GetOTPResponse>(
     api.post("/otp/send-otp", body)
   );
-}
+};
 
-export async function verifyAdminOTP(body: VerifyAdminOtpDto) {
-  return handleApiCall<AuthResponseTypes.VerifyAdminOTPResponse>(
+export const verifyAdminOTP = async (body: VerifyAdminOtpDto) => {
+  return handleApiCall<ResponseTypes.VerifyAdminOTPResponse>(
     api.post("/otp/verify-admin-otp", body)
   );
-}
+};
 
-export async function resetAdminPassword(body: {
+export const resetAdminPassword = async (body: {
   email: string;
   newPassword: string;
-}) {
-  return handleApiCall<AuthResponseTypes.ResetAdminPasswordResponse>(
+}) => {
+  return handleApiCall<ResponseTypes.ResetAdminPasswordResponse>(
     api.put("/admin/reset-password", body)
   );
-}
+};

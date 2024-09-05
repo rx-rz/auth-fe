@@ -12,5 +12,5 @@ export const ROUTES = {
   PROJECT_DETAILS: (id: string) => `/projects/${id}`,
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
-  NEW_PROJECT: "/projects/new-project",
+  NEW_PROJECT: "/projects/new",
 };
