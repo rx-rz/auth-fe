@@ -20,6 +20,7 @@ type Props = {
   isLoading?: boolean;
   confirmButtonText?: string;
   cancelButtonText?: string;
+  isDestructive?: boolean;
 };
 
 const ConfirmationDialog = ({
@@ -30,10 +31,12 @@ const ConfirmationDialog = ({
   onConfirm,
   isLoading = false,
   confirmButtonText = "Yes",
+  isDestructive,
   cancelButtonText = "No",
 }: Props) => {
   const handleConfirmation = async () => {
     await onConfirm();
+    location.reload();
   };
   return (
     <Dialog>
@@ -46,10 +49,13 @@ const ConfirmationDialog = ({
           </p>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose className="mr-3 text-sm px-3">
+          <DialogClose className="mr-3 text-sm px-3 bg-slate-100 min-w-[80px]">
             {cancelButtonText}
           </DialogClose>
-          <Button variant="destructive" onClick={handleConfirmation}>
+          <Button
+            variant={isDestructive ? "destructive" : "default"}
+            onClick={handleConfirmation}
+          >
             {isLoading ? <LoadingIcon /> : confirmButtonText}
           </Button>
         </DialogFooter>

@@ -12,7 +12,7 @@ export const createProject = (body: FormTypes.CreateProjectDto) => {
 
 export const updateProjectName = (body: FormTypes.UpdateProjectNameDto) => {
   return handleApiCall<ResponseTypes.UpdateProjectNameResponse>(
-    api.post("/project/update-project-name", body)
+    api.put("/project/update-project-name", body)
   );
 };
 

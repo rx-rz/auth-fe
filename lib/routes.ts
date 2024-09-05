@@ -10,6 +10,7 @@ export const ROUTES = {
   DELETE_ACCOUNT: "/profile/delete-account",
   PROJECTS: "/projects",
   PROJECT_DETAILS: (id: string) => `/projects/${id}`,
+  PROJECT_SETTINGS: (id: string) => `/projects/${id}/settings`,
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
   NEW_PROJECT: "/projects/new",

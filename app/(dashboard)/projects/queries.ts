@@ -29,7 +29,7 @@ export const getAdminProjectsQuery = () => {
 };
 
 export const getProjectDetailsQuery = ({ id }: { id: string }) => {
-  const { showToast } = useShowToast();
+  // const { showToast } = useShowToast();
   let project;
   const fetcher = (url: string): Promise<GetProjectResponse> => {
     return api.get(url, {
@@ -41,9 +41,9 @@ export const getProjectDetailsQuery = ({ id }: { id: string }) => {
     isLoading: projectIsLoading,
     error,
   } = useSWR(id ? "/project/get-project" : null, fetcher);
-  if (error) {
-    showToast({ error });
-  }
+  // if (error) {
+  //   showToast({ error });
+  // }
   if (data) {
     project = data.project;
   }

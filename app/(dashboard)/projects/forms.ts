@@ -54,22 +54,21 @@ export const useCreateNewProject = () => {
   return { loading, success, keys, form, submitCreateNewProjectForm };
 };
 
-export const useUpdateProjectName = ({ projectId }: { projectId: string }) => {
-  const { showToast } = useShowToast();
+export const useUpdateProjectName = () => {
+  // const { showToast } = useShowToast();
   const [loading, setLoading] = useState(false);
   const form = useForm<UpdateProjectNameDto>({
     resolver: zodResolver(UpdateProjectNameSchema),
-    defaultValues: {
-      projectId,
-    },
   });
 
   const submitUpdateProjectName = async (values: UpdateProjectNameDto) => {
     setLoading(true);
     const { error } = await updateProjectName(values);
-    if (error) {
-      showToast({ error });
-    }
+    // if (error) {
+    //   showToast({ error });
+    // }
+    setLoading(false);
   };
+
   return { loading, form, submitUpdateProjectName };
 };
