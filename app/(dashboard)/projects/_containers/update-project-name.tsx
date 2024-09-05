@@ -9,25 +9,20 @@ import {
 } from "@/components/ui/form";
 import { useUpdateProjectName } from "../forms";
 import ConfirmationDialog from "@/components/confirmation-dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getProjectDetailsQuery } from "../queries";
-import { useParams } from "next/navigation";
-
 type Props = {
   name: string;
   projectId: string;
 };
 
-export const UpdateProjectName = () => {
-  const { id } = useParams();
-  const { project } = getProjectDetailsQuery({ id: (id as string) ?? "" });
+export const UpdateProjectName = ({ name, projectId }: Props) => {
   const { form } = useUpdateProjectName();
 
   return (
-    <div>
+    <div className="w-full">
+      <h3 className="font-bold mb-2">Project Details</h3>
       <Form {...form}>
-        <form className="max-w-[400px] w-[95%] mt-8 ">
+        <form className="">
           <FormField
             control={form.control}
             name="name"
@@ -36,10 +31,10 @@ export const UpdateProjectName = () => {
                 <FormLabel>Project Name</FormLabel>
                 <FormControl>
                   <Input
-                    className=""
+                    className="w-full"
                     {...field}
                     type="text"
-                    defaultValue={project?.name}
+                    defaultValue={name}
                   />
                 </FormControl>
                 <FormMessage />
@@ -47,8 +42,8 @@ export const UpdateProjectName = () => {
             )}
           />
           <UpdateConfirmDialog
-            name={form.getValues("name")}
-            projectId={(id as string) ?? ""}
+            name={form.getValues("name") ?? name}
+            projectId={projectId ?? ""}
           />
         </form>
       </Form>
@@ -57,14 +52,14 @@ export const UpdateProjectName = () => {
 };
 
 const UpdateConfirmDialog = ({ name, projectId }: Props) => {
-  const { submitUpdateProjectName, loading } = useUpdateProjectName();
+  const { submitUpdateProjectNameForm, loading } = useUpdateProjectName();
   return (
     <ConfirmationDialog
-      onConfirm={() => submitUpdateProjectName({ name, projectId })}
+      onConfirm={() => submitUpdateProjectNameForm({ name, projectId })}
       title="Are you sure you want to update the name of this project to"
       itemName={name}
       trigger="Update"
-      triggerClassName="bg-green-500 text-white font-bold p-2 text-sm"
+      triggerClassName="bg-primary rounded-md text-white font-bold p-2 text-sm"
       cancelButtonText="No"
       confirmButtonText="Yes, Update"
       isLoading={loading}

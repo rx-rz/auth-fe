@@ -19,7 +19,6 @@ export const EditProjectNameDialog = ({
   projectId: string;
   name: string;
 }) => {
-  const [open, setOpen] = useState(false);
   const { updateProjectName, loading } = updateProjectNameMutation();
 
   return (

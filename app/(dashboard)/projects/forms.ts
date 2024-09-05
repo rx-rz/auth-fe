@@ -2,6 +2,7 @@ import { useShowToast } from "@/lib/hooks";
 import {
   CreateProjectDto,
   CreateProjectSchema,
+  DeleteProjectSchema,
   UpdateProjectNameDto,
   UpdateProjectNameSchema,
 } from "@/schemas/project.schemas";
@@ -9,7 +10,14 @@ import { useUserStore } from "@/store/user.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { createProject, getProjectKeys, updateProjectName } from "./actions";
+import {
+  createProject,
+  deleteProject,
+  getProjectKeys,
+  updateProjectName,
+} from "./actions";
+import { useRouter } from "next/navigation";
+import { ROUTES } from "@/lib/routes";
 
 export const useCreateNewProject = () => {
   const { showToast } = useShowToast();
@@ -55,20 +63,42 @@ export const useCreateNewProject = () => {
 };
 
 export const useUpdateProjectName = () => {
-  // const { showToast } = useShowToast();
+  const { showToast } = useShowToast();
   const [loading, setLoading] = useState(false);
   const form = useForm<UpdateProjectNameDto>({
     resolver: zodResolver(UpdateProjectNameSchema),
   });
 
-  const submitUpdateProjectName = async (values: UpdateProjectNameDto) => {
+  const submitUpdateProjectNameForm = async (values: UpdateProjectNameDto) => {
     setLoading(true);
     const { error } = await updateProjectName(values);
-    // if (error) {
-    //   showToast({ error });
-    // }
+    if (error) {
+      showToast({ error });
+    }
     setLoading(false);
   };
 
-  return { loading, form, submitUpdateProjectName };
+  return { loading, form, submitUpdateProjectNameForm };
+};
+
+export const useDeleteProject = ({ projectId }: { projectId: string }) => {
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useShowToast();
+  const form = useForm<{ name: string }>({
+    resolver: zodResolver(DeleteProjectSchema),
+    mode: "onTouched",
+  });
+  const router = useRouter();
+
+  const submitDeleteProjectForm = async () => {
+    setLoading(true);
+    const { error, response } = await deleteProject({ projectId });
+    if (error) {
+      showToast({ error });
+    }
+    if (response && response.success) {
+      router.push(ROUTES.PROJECTS);
+    }
+  };
+  return { loading, form, submitDeleteProjectForm };
 };
