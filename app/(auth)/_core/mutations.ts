@@ -6,13 +6,13 @@ import * as FormTypes from "@/schemas/admin.schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
-  getMfaAuthenticationOptions,
-  getMfaRegistrationOptions,
-  loginAdmin,
-  registerAdmin,
-  resetAdminPassword,
-  verifyMfaAuthenticationOptions,
-  verifyMfaRegistrationOptions,
+  getMfaAuthenticationOptionsAction,
+  getMfaRegistrationOptionsAction,
+  loginAdminAction,
+  registerAdminAction,
+  resetAdminPasswordAction,
+  verifyMfaAuthenticationOptionsAction,
+  verifyMfaRegistrationOptionsAction,
 } from "./actions";
 import { useRouter } from "next/navigation";
 import { decodeUserToken, User } from "@/lib/utils";
@@ -21,19 +21,17 @@ import { useState } from "react";
 import { ROUTES } from "@/lib/routes";
 import { useShowToast } from "@/lib/hooks";
 
-export const useRegister = () => {
+export const registerAdminMutation = () => {
   const router = useRouter();
   const { showToast } = useShowToast();
   const [loading, setLoading] = useState(false);
-  const registerAdminForm = useForm<FormTypes.RegisterAdminDto>({
+  const form = useForm<FormTypes.RegisterAdminDto>({
     resolver: zodResolver(FormTypes.RegisterAdminSchema),
   });
 
-  const submitRegisterAdminForm = async (
-    values: FormTypes.RegisterAdminDto
-  ) => {
+  const registerAdmin = async (values: FormTypes.RegisterAdminDto) => {
     setLoading(true);
-    const { error, response } = await registerAdmin(values);
+    const { error, response } = await registerAdminAction(values);
     if (response && response.success) {
       showToast({ title: "Admin registered successfully" });
       router.push(ROUTES.LOGIN);
@@ -46,21 +44,21 @@ export const useRegister = () => {
     setLoading(false);
   };
 
-  return { registerAdminForm, loading, submitRegisterAdminForm };
+  return { form, loading, registerAdmin };
 };
 
-export const useLogin = () => {
+export const loginAdminMutation = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { setUser } = useUserStore();
   const { showToast } = useShowToast();
-  const loginAdminForm = useForm<FormTypes.LoginAdminDto>({
+  const form = useForm<FormTypes.LoginAdminDto>({
     resolver: zodResolver(FormTypes.LoginAdminSchema),
   });
 
-  const submitLoginAdminForm = async (values: FormTypes.LoginAdminDto) => {
+  const loginAdmin = async (values: FormTypes.LoginAdminDto) => {
     setLoading(true);
-    const { response, error } = await loginAdmin(values);
+    const { response, error } = await loginAdminAction(values);
     if (response && response.success) {
       const user: User | undefined = decodeUserToken(response.accessToken);
       if (user) {
@@ -79,19 +77,19 @@ export const useLogin = () => {
     setLoading(false);
   };
 
-  return { loginAdminForm, loading, submitLoginAdminForm };
+  return { form, loading, loginAdmin };
 };
 
-export const useMFA = () => {
+export const webAuthnMutation = () => {
   const { user, setUser } = useUserStore();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { showToast } = useShowToast();
 
-  const triggerWebMFARegistration = async () => {
+  const triggerWebAuthnRegistration = async () => {
     setLoading(true);
     if (user) {
-      const { response, error } = await getMfaRegistrationOptions(
+      const { response, error } = await getMfaRegistrationOptionsAction(
         user.email ?? ""
       );
       if (error) {
@@ -102,7 +100,7 @@ export const useMFA = () => {
       if (response?.success) {
         const registrationResponse = await startRegistration(response.options);
         const { response: verificationResponse, error } =
-          await verifyMfaRegistrationOptions({
+          await verifyMfaRegistrationOptionsAction({
             email: user.email ?? "",
             options: registrationResponse,
             webAuthnUserId: response.options.user.id,
@@ -124,10 +122,10 @@ export const useMFA = () => {
     setLoading(false);
   };
 
-  const triggerWebMFAAuthentication = async () => {
+  const triggerWebAuthnAuthentication = async () => {
     setLoading(true);
     if (user) {
-      const { response, error } = await getMfaAuthenticationOptions(
+      const { response, error } = await getMfaAuthenticationOptionsAction(
         user.email ?? ""
       );
       if (error) {
@@ -142,7 +140,7 @@ export const useMFA = () => {
           response.options
         );
         const { response: verificationResponse, error } =
-          await verifyMfaAuthenticationOptions({
+          await verifyMfaAuthenticationOptionsAction({
             email: user.email ?? "",
             options: authenticationResponse,
           });
@@ -161,36 +159,38 @@ export const useMFA = () => {
     }
     setLoading(false);
   };
-  return { loading, triggerWebMFARegistration, triggerWebMFAAuthentication };
+  return {
+    loading,
+    triggerWebAuthnAuthentication,
+    triggerWebAuthnRegistration,
+  };
 };
 
-export const useForgotPassword = () => {
-  const forgotPasswordForm = useForm<FormTypes.AdminEmailDto>({
+export const forgotPasswordMutation = () => {
+  const form = useForm<FormTypes.AdminEmailDto>({
     resolver: zodResolver(FormTypes.AdminEmailSchema),
   });
 
-  const submitForgotPasswordForm = ({ email }: FormTypes.AdminEmailDto) => {
+  const handleForgotPasswordEmail = ({ email }: FormTypes.AdminEmailDto) => {
     sessionStorage.setItem("email-for-password-reset", email);
   };
 
-  return { forgotPasswordForm, submitForgotPasswordForm };
+  return { form, handleForgotPasswordEmail };
 };
 
-export const useResetPassword = () => {
+export const resetPasswordMutation = () => {
   const { showToast } = useShowToast();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  const resetPasswordForm = useForm<FormTypes.ResetAdminPasswordDto>({
+  const form = useForm<FormTypes.ResetAdminPasswordDto>({
     resolver: zodResolver(FormTypes.ResetAdminPasswordSchema),
   });
 
-  const submitResetUserPasswordForm = async (
-    values: FormTypes.ResetAdminPasswordDto
-  ) => {
+  const resetUserPassword = async (values: FormTypes.ResetAdminPasswordDto) => {
     setLoading(true);
     const { email, newPassword } = values;
-    const { error, response } = await resetAdminPassword({
+    const { error, response } = await resetAdminPasswordAction({
       email,
       newPassword,
     });
@@ -208,5 +208,5 @@ export const useResetPassword = () => {
     setLoading(false);
   };
 
-  return { loading, resetPasswordForm, submitResetUserPasswordForm };
+  return { loading, form, resetUserPassword };
 };

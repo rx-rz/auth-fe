@@ -6,12 +6,11 @@ import { Separator } from "@/components/ui/separator";
 import { DeleteProject } from "../../_containers/delete-project";
 import { getProjectDetailsQuery } from "../../queries";
 import { useParams } from "next/navigation";
-import { CreateRole } from "../../_containers/create-role";
+import { RoleList } from "../../_containers/role-list";
 
 const ProjectSettingsPage = () => {
   const { id } = useParams();
   const { project } = getProjectDetailsQuery({ id: id as string });
-
   return (
     <Tabs
       defaultValue="general"
@@ -38,8 +37,9 @@ const ProjectSettingsPage = () => {
           />
         </div>
       </TabsContent>
-      <TabsContent value="rbac">
-        <CreateRole projectId={project?.id ?? ""} />
+      <TabsContent value="rbac" className="flex flex-col gap-5 mt-5">
+        <RoleList projectId={project?.id ?? ""} />
+        <Separator />
       </TabsContent>
     </Tabs>
   );

@@ -7,19 +7,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useLogin } from "../_core/mutations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/lib/routes";
 import Link from "next/link";
 import { FormHeader } from "../components/form-header";
 import { LoadingIcon } from "@/components/loading-icon";
+import { loginAdminMutation } from "../_core/mutations";
 
 const LoginPage = () => {
-  const { loginAdminForm: form, loading, submitLoginAdminForm } = useLogin();
+  const { form, loading, loginAdmin } = loginAdminMutation();
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(submitLoginAdminForm)}>
+      <form onSubmit={form.handleSubmit(loginAdmin)}>
         <FormHeader title="Log In" />
         <FormField
           control={form.control}

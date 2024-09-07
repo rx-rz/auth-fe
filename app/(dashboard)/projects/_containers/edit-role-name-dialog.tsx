@@ -7,37 +7,42 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useState } from "react";
+import { Edit2Icon } from "lucide-react";
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useCreateRole } from "../mutations";
 import { LoadingIcon } from "@/components/loading-icon";
-
-type Props = {
-  projectId: string;
-};
-
-export const CreateRole = ({ projectId }: Props) => {
-  const { form, loading, submitCreateRoleForm } = useCreateRole({ projectId });
+import { updateRoleNameMutation } from "../mutations";
+export const EditRoleNameDialog = ({
+  roleId,
+  currentName,
+}: {
+  roleId: string;
+  currentName: string;
+}) => {
+  const { loading, form, updateRoleName } = updateRoleNameMutation({
+    roleId,
+  });
   return (
     <Dialog>
-      <DialogTrigger className="bg-black px-3 py-2 text-white font-medium mt-4 rounded-md">
-        Create Role
+      <DialogTrigger className="p-2 bg-black">
+        <Edit2Icon stroke="white" />
       </DialogTrigger>
       <DialogContent className="font-satoshi w-full max-w-[320px]">
-        <DialogTitle className="mt-4">Create Role</DialogTitle>
-
+        <DialogTitle className="mt-4">Update Role Name</DialogTitle>
         <DialogDescription>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(submitCreateRoleForm)}>
+            <form onSubmit={form.handleSubmit(updateRoleName)}>
               <FormField
                 control={form.control}
                 name="name"
+                defaultValue={currentName}
                 render={({ field }) => (
                   <FormItem className="mb-4 ">
                     <FormLabel>

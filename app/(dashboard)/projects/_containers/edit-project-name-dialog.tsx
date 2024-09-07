@@ -1,16 +1,6 @@
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Check, MoreHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { updateProjectNameMutation } from "../../_core/swr";
+import { Check } from "lucide-react";
 import ConfirmationDialog from "@/components/confirmation-dialog";
+import { updateProjectNameMutation } from "../mutations";
 
 export const EditProjectNameDialog = ({
   projectId,
@@ -25,15 +15,9 @@ export const EditProjectNameDialog = ({
     <ConfirmationDialog
       onConfirm={async () => await updateProjectName({ name, projectId })}
       title="Are you sure you want to update the name of this project to"
-      trigger={
-        <DialogTrigger className="bg-black items-center px-3 h-[2.8rem] justify-center flex">
-          <Check stroke="white" />
-        </DialogTrigger>
-      }
+      trigger={<Check stroke="white" />}
       confirmButtonText="Yes, Update"
       isLoading={loading}
-
     />
   );
-
 };

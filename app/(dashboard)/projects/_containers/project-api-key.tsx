@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Clipboard, CheckCircle, Check } from "lucide-react";
+import { Clipboard, Check } from "lucide-react";
 import { useState, useEffect } from "react";
 
 type Props = {

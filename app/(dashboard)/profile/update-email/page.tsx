@@ -9,17 +9,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useUpdateAdminEmail } from "../mutations";
 import { LoadingIcon } from "@/components/loading-icon";
+import { updateAdminEmailMutation } from "../mutations";
 
 const UpdateEmailPage = () => {
-  const { form, loading, submitUpdateAdminEmailForm } = useUpdateAdminEmail();
+  const { form, loading, updateAdminEmail } = updateAdminEmailMutation();
   return (
     <div className="">
       <h1 className="text-2xl font-bold opacity-90">Update Admin Email</h1>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(submitUpdateAdminEmailForm)}
+          onSubmit={form.handleSubmit(updateAdminEmail)}
           className="max-w-[400px] w-[95%] mt-8"
         >
           <FormField

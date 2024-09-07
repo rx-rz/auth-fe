@@ -6,13 +6,13 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
-  updateAdminDetails,
-  updateAdminEmail,
-  updateAdminPassword,
+  updateAdminDetailsAction,
+  updateAdminEmailAction,
+  updateAdminPasswordAction,
 } from "./actions";
 import { ROUTES } from "@/lib/routes";
 
-export const useUpdateAdminEmail = () => {
+export const updateAdminEmailMutation = () => {
   const [loading, setLoading] = useState(false);
   const { user, setUser } = useUserStore();
   const router = useRouter();
@@ -25,11 +25,9 @@ export const useUpdateAdminEmail = () => {
     },
   });
 
-  const submitUpdateAdminEmailForm = async (
-    values: FormTypes.UpdateAdminEmailDto
-  ) => {
+  const updateAdminEmail = async (values: FormTypes.UpdateAdminEmailDto) => {
     setLoading(true);
-    const { error, response } = await updateAdminEmail(values);
+    const { error, response } = await updateAdminEmailAction(values);
     if (response && response.success) {
       setUser({ ...user, email: values.newEmail });
       showToast({
@@ -41,10 +39,10 @@ export const useUpdateAdminEmail = () => {
     setLoading(false);
   };
 
-  return { loading, form, submitUpdateAdminEmailForm };
+  return { loading, form, updateAdminEmail };
 };
 
-export const useUpdateAdminPassword = () => {
+export const updateAdminPasswordMutation = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { showToast } = useShowToast();
@@ -58,11 +56,11 @@ export const useUpdateAdminPassword = () => {
     },
   });
 
-  const submitUpdateAdminPasswordForm = async (
+  const updateAdminPassword = async (
     values: FormTypes.UpdateAdminPasswordDto
   ) => {
     setLoading(true);
-    const { error, response } = await updateAdminPassword(values);
+    const { error, response } = await updateAdminPasswordAction(values);
     if (response && response.success) {
       showToast({
         title: "Admin password updated successfully",
@@ -74,10 +72,10 @@ export const useUpdateAdminPassword = () => {
     }
     setLoading(false);
   };
-  return { loading, form, submitUpdateAdminPasswordForm };
+  return { loading, form, updateAdminPassword };
 };
 
-export const useUpdateAdminDetails = () => {
+export const updateAdminDetailsMutation = () => {
   const [loading, setLoading] = useState(false);
   const { user, setUser } = useUserStore();
   const router = useRouter();
@@ -91,11 +89,9 @@ export const useUpdateAdminDetails = () => {
     },
   });
 
-  const submitUpdateAdminDetailsForm = async (
-    values: FormTypes.UpdateAdminDto
-  ) => {
+  const updateAdminDetails = async (values: FormTypes.UpdateAdminDto) => {
     setLoading(true);
-    const { error, response } = await updateAdminDetails(values);
+    const { error, response } = await updateAdminDetailsAction(values);
     if (response && response.success) {
       setUser({
         ...user,
@@ -112,5 +108,5 @@ export const useUpdateAdminDetails = () => {
     }
     setLoading(false);
   };
-  return { loading, form, submitUpdateAdminDetailsForm };
+  return { loading, form, updateAdminDetails };
 };

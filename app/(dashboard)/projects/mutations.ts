@@ -3,6 +3,7 @@ import {
   CreateProjectDto,
   CreateProjectSchema,
   DeleteProjectSchema,
+  ProjectIdDto,
   UpdateProjectNameDto,
   UpdateProjectNameSchema,
 } from "@/schemas/project.schemas";
@@ -10,26 +11,36 @@ import { useUserStore } from "@/store/user.store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  createProject,
-  createRole,
-  deleteProject,
-  deleteRole,
-  getProjectKeys,
-  updateProjectName,
-  updateRoleName,
-} from "./actions";
 import { useRouter } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
 import {
+  AssignPermissionToRoleDto,
+  CreatePermissionDto,
+  CreatePermissionSchema,
   CreateRoleDto,
   CreateRoleSchema,
   RoleNameSchema,
+  UpdatePermissionDto,
+  UpdatePermissionSchema,
   UpdateRoleNameDto,
   UpdateRoleNameSchema,
 } from "@/schemas/rbac.schemas";
+import { api } from "@/lib/axios";
+import {
+  assignPermissionToRoleAction,
+  createPermissionAction,
+  createProjectAction,
+  createRoleAction,
+  deletePermissionAction,
+  deleteProjectAction,
+  deleteRoleAction,
+  getProjectKeysAction,
+  updatePermissionAction,
+  updateProjectNameAction,
+  updateRoleNameAction,
+} from "./actions";
 
-export const useCreateNewProject = () => {
+export const createNewProjectMutation = () => {
   const { showToast } = useShowToast();
   const [loading, setLoading] = useState(false);
   const { user } = useUserStore();
@@ -45,12 +56,12 @@ export const useCreateNewProject = () => {
     },
   });
 
-  const submitCreateNewProjectForm = async (values: CreateProjectDto) => {
+  const createNewProject = async (values: CreateProjectDto) => {
     setLoading(true);
-    const { error, response } = await createProject(values);
+    const { error, response } = await createProjectAction(values);
     if (response && response.success) {
       setLoading(false);
-      const { response: projectKeysResponse } = await getProjectKeys({
+      const { response: projectKeysResponse } = await getProjectKeysAction({
         projectId: response.project.id,
       });
       if (projectKeysResponse && projectKeysResponse.success) {
@@ -69,29 +80,29 @@ export const useCreateNewProject = () => {
     }
   };
 
-  return { loading, success, keys, form, submitCreateNewProjectForm };
+  return { loading, success, keys, form, createNewProject };
 };
 
-export const useUpdateProjectName = () => {
+export const updateProjectNameMutation = () => {
   const { showToast } = useShowToast();
   const [loading, setLoading] = useState(false);
   const form = useForm<UpdateProjectNameDto>({
     resolver: zodResolver(UpdateProjectNameSchema),
   });
 
-  const submitUpdateProjectNameForm = async (values: UpdateProjectNameDto) => {
+  const updateProjectName = async (values: UpdateProjectNameDto) => {
     setLoading(true);
-    const { error } = await updateProjectName(values);
+    const { error } = await updateProjectNameAction(values);
     if (error) {
       showToast({ error });
     }
     setLoading(false);
   };
 
-  return { loading, form, submitUpdateProjectNameForm };
+  return { loading, form, updateProjectName };
 };
 
-export const useDeleteProject = ({ projectId }: { projectId: string }) => {
+export const deleteProjectMutation = ({ projectId }: { projectId: string }) => {
   const [loading, setLoading] = useState(false);
   const { showToast } = useShowToast();
   const form = useForm<{ name: string }>({
@@ -100,9 +111,9 @@ export const useDeleteProject = ({ projectId }: { projectId: string }) => {
   });
   const router = useRouter();
 
-  const submitDeleteProjectForm = async () => {
+  const deleteProject = async () => {
     setLoading(true);
-    const { error, response } = await deleteProject({ projectId });
+    const { error, response } = await deleteProjectAction({ projectId });
     if (error) {
       showToast({ error });
     }
@@ -110,19 +121,19 @@ export const useDeleteProject = ({ projectId }: { projectId: string }) => {
       router.push(ROUTES.PROJECTS);
     }
   };
-  return { loading, form, submitDeleteProjectForm };
+  return { loading, form, deleteProject };
 };
 
-export const useCreateRole = ({ projectId }: { projectId: string }) => {
+export const createRoleMutation = ({ projectId }: { projectId: string }) => {
   const [loading, setLoading] = useState(false);
   const { showToast } = useShowToast();
   const form = useForm<CreateRoleDto>({
     resolver: zodResolver(RoleNameSchema),
   });
 
-  const submitCreateRoleForm = async (body: CreateRoleDto) => {
+  const createRole = async (body: CreateRoleDto) => {
     setLoading(true);
-    const { error, response } = await createRole({ ...body, projectId });
+    const { error, response } = await createRoleAction({ ...body, projectId });
     if (error) {
       showToast({ error });
     }
@@ -131,19 +142,20 @@ export const useCreateRole = ({ projectId }: { projectId: string }) => {
     }
   };
 
-  return { loading, form, submitCreateRoleForm };
+  return { loading, form, createRole };
 };
 
-export const useUpdateRoleName = () => {
+export const updateRoleNameMutation = ({ roleId }: { roleId: string }) => {
   const [loading, setLoading] = useState(false);
+
   const { showToast } = useShowToast();
-  const form = useForm<UpdateRoleNameDto>({
-    resolver: zodResolver(UpdateRoleNameSchema),
+  const form = useForm<{ name: string }>({
+    resolver: zodResolver(RoleNameSchema),
   });
 
-  const submitUpdateRoleNameForm = async (body: UpdateRoleNameDto) => {
+  const updateRoleName = async (body: { name: string }) => {
     setLoading(false);
-    const { error, response } = await updateRoleName(body);
+    const { error, response } = await updateRoleNameAction({ ...body, roleId });
     if (error) {
       showToast({ error });
     }
@@ -151,16 +163,16 @@ export const useUpdateRoleName = () => {
       location.reload();
     }
   };
-  return { loading, form, submitUpdateRoleNameForm };
+  return { loading, form, updateRoleName };
 };
 
-export const useDeleteRole = () => {
+export const deleteRoleMutation = () => {
   const [loading, setLoading] = useState(false);
   const { showToast } = useShowToast();
 
-  const deleteRoleMutation = async ({ roleId }: { roleId: string }) => {
+  const deleteRole = async ({ roleId }: { roleId: string }) => {
     setLoading(true);
-    const { error, response } = await deleteRole({ roleId });
+    const { error, response } = await deleteRoleAction({ roleId });
     if (error) {
       showToast({ error });
     }
@@ -169,5 +181,90 @@ export const useDeleteRole = () => {
     }
     setLoading(false);
   };
-  return { loading, deleteRoleMutation };
+  return { loading, deleteRole };
+};
+
+export const createPermissionMutaion = () => {
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useShowToast();
+
+  const form = useForm<CreatePermissionDto>({
+    resolver: zodResolver(CreatePermissionSchema),
+  });
+
+  const createPermission = async (body: CreatePermissionDto) => {
+    setLoading(true);
+    const { error, response } = await createPermissionAction(body);
+    if (error) showToast({ error });
+    if (response && response.success) location.reload();
+    setLoading(false);
+  };
+
+  return { loading, form, createPermission };
+};
+
+export const updatePermissionMutation = ({
+  permissionId,
+}: {
+  permissionId: string;
+}) => {
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useShowToast();
+
+  const form = useForm<{ name: string; description?: string }>({
+    resolver: zodResolver(UpdatePermissionSchema),
+  });
+
+  const updatePermission = async (body: UpdatePermissionDto) => {
+    setLoading(false);
+    const { error, response } = await updatePermissionAction({
+      ...body,
+      permissionId,
+    });
+    if (error) {
+      showToast({ error });
+    }
+    if (response && response.success) location.reload();
+  };
+
+  return { loading, form, updatePermission };
+};
+
+export const assignPermissionToRoleMutation = ({
+  permissionId,
+  roleId,
+}: AssignPermissionToRoleDto) => {
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useShowToast();
+
+  const assignPermissionToRole = async () => {
+    setLoading(true);
+    const { error, response } = await assignPermissionToRoleAction({
+      permissionId,
+      roleId,
+    });
+    if (error) showToast({ error });
+    if (response && response.success) location.reload();
+  };
+  return { loading, assignPermissionToRole };
+};
+
+export const deletePermissionMutation = ({
+  permissionId,
+}: {
+  permissionId: string;
+}) => {
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useShowToast();
+
+  const deletePermission = async () => {
+    setLoading(true);
+    const { error, response } = await deletePermissionAction({ permissionId });
+    if (error) {
+      showToast({ error });
+    }
+    if (response && response.success) location.reload();
+  };
+
+  return { loading, deletePermission };
 };

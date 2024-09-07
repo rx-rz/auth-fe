@@ -7,24 +7,19 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useRegister } from "../_core/mutations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
 import { FormHeader } from "../components/form-header";
 import { LoadingIcon } from "@/components/loading-icon";
+import { registerAdminMutation } from "../_core/mutations";
 const RegisterPage = () => {
-  const {
-    registerAdminForm: form,
-    submitRegisterAdminForm,
-    loading,
-  } = useRegister();
+  const { form, registerAdmin, loading } = registerAdminMutation();
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(submitRegisterAdminForm)}>
+      <form onSubmit={form.handleSubmit(registerAdmin)}>
         <FormHeader title="Register" />
         <FormField
           control={form.control}

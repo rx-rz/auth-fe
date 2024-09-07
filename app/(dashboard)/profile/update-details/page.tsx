@@ -9,18 +9,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useUpdateAdminDetails } from "../mutations";
 import { LoadingIcon } from "@/components/loading-icon";
+import { updateAdminDetailsMutation } from "../mutations";
 
 const UpdateDetailsPage = () => {
-  const { form, loading, submitUpdateAdminDetailsForm } =
-    useUpdateAdminDetails();
+  const { form, loading, updateAdminDetails } = updateAdminDetailsMutation();
   return (
     <div className="">
       <h1 className="text-2xl font-bold opacity-90">Update Details</h1>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(submitUpdateAdminDetailsForm)}
+          onSubmit={form.handleSubmit(updateAdminDetails)}
           className="max-w-[400px] w-[95%] mt-8"
         >
           <FormField

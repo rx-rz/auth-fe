@@ -6,12 +6,12 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { useState } from "react";
-import { getOTP, verifyAdminOTP } from "../_core/actions";
 import { useUserStore } from "@/store/user.store";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ROUTES } from "@/lib/routes";
 import { useToast } from "@/components/ui/use-toast";
 import { FormHeader } from "../components/form-header";
+import { getOTPAction, verifyAdminOTPAction } from "../_core/actions";
 
 const OTPPage = () => {
   const params = useSearchParams();
@@ -24,7 +24,7 @@ const OTPPage = () => {
 
   async function verifyOTP() {
     const resetEmail = params.get("reset-email") ?? "";
-    const { error, response } = await verifyAdminOTP({
+    const { error, response } = await verifyAdminOTPAction({
       code: otp,
       email: resetEmail ?? user.email ?? "",
     });
@@ -45,9 +45,10 @@ const OTPPage = () => {
       setOTPError(error?.error);
     }
   }
+  
   async function getOTPInEmail() {
     const resetEmail = params.get("reset-email") ?? "";
-    const { error, response } = await getOTP({
+    const { error, response } = await getOTPAction({
       email: resetEmail ?? user.email ?? "",
       isAdmin: true,
     });

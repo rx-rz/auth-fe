@@ -11,17 +11,17 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { useDeleteProject } from "../mutations";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoadingIcon } from "@/components/loading-icon";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { deleteProjectMutation } from "../mutations";
 type Props = {
   projectId: string;
   name: string;
 };
 export const DeleteProject = ({ projectId, name }: Props) => {
-  const { form, loading, submitDeleteProjectForm } = useDeleteProject({
+  const { form, loading, deleteProject } = deleteProjectMutation({
     projectId,
   });
   return (
@@ -37,7 +37,7 @@ export const DeleteProject = ({ projectId, name }: Props) => {
         </DialogTitle>
         <DialogDescription>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(submitDeleteProjectForm)}>
+            <form onSubmit={form.handleSubmit(deleteProject)}>
               <FormField
                 control={form.control}
                 name="name"

@@ -8,20 +8,20 @@ import {
 import { CreateOtpDto, VerifyAdminOtpDto } from "@/schemas/otp.schemas";
 import { handleApiCall } from "@/lib/utils";
 
-export const registerAdmin = async (body: RegisterAdminDto) => {
+export const registerAdminAction = async (body: RegisterAdminDto) => {
   const { confirmPassword, ...data } = body;
   return handleApiCall<ResponseTypes.RegisterAdminResponse>(
     api.post("/admin/register", data)
   );
 };
 
-export const loginAdmin = async (body: LoginAdminDto) => {
+export const loginAdminAction = async (body: LoginAdminDto) => {
   return handleApiCall<ResponseTypes.LoginAdminReponse>(
     api.post("/admin/login", body)
   );
 };
 
-export const getMfaRegistrationOptions = async (email: string) => {
+export const getMfaRegistrationOptionsAction = async (email: string) => {
   return handleApiCall<ResponseTypes.GetMfaRegistrationOptionsResponse>(
     api.get("/mfa/get-registration-options", {
       params: { email },
@@ -29,7 +29,7 @@ export const getMfaRegistrationOptions = async (email: string) => {
   );
 };
 
-export const verifyMfaRegistrationOptions = async ({
+export const verifyMfaRegistrationOptionsAction = async ({
   email,
   options,
   webAuthnUserId,
@@ -44,7 +44,7 @@ export const verifyMfaRegistrationOptions = async ({
   );
 };
 
-export const getMfaAuthenticationOptions = async (email: string) => {
+export const getMfaAuthenticationOptionsAction = async (email: string) => {
   return handleApiCall<ResponseTypes.GetMfaAuthenticationOptionsResponse>(
     api.get("/mfa/get-authentication-options", {
       params: { email },
@@ -52,7 +52,7 @@ export const getMfaAuthenticationOptions = async (email: string) => {
   );
 };
 
-export const verifyMfaAuthenticationOptions = async ({
+export const verifyMfaAuthenticationOptionsAction = async ({
   email,
   options,
 }: {
@@ -65,19 +65,19 @@ export const verifyMfaAuthenticationOptions = async ({
   );
 };
 
-export const getOTP = async (body: CreateOtpDto) => {
+export const getOTPAction = async (body: CreateOtpDto) => {
   return handleApiCall<ResponseTypes.GetOTPResponse>(
     api.post("/otp/send-otp", body)
   );
 };
 
-export const verifyAdminOTP = async (body: VerifyAdminOtpDto) => {
+export const verifyAdminOTPAction = async (body: VerifyAdminOtpDto) => {
   return handleApiCall<ResponseTypes.VerifyAdminOTPResponse>(
     api.post("/otp/verify-admin-otp", body)
   );
 };
 
-export const resetAdminPassword = async (body: {
+export const resetAdminPasswordAction = async (body: {
   email: string;
   newPassword: string;
 }) => {

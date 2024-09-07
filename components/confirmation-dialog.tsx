@@ -49,7 +49,7 @@ const ConfirmationDialog = ({
           </p>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose className="mr-3 text-sm px-3 bg-slate-100 min-w-[80px]">
+          <DialogClose className="mr-3 text-sm px-3 bg-slate-300 min-w-[80px]">
             {cancelButtonText}
           </DialogClose>
           <Button

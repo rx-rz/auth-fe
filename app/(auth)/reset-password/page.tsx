@@ -1,5 +1,4 @@
 "use client";
-import { useResetPassword } from "../_core/mutations";
 import {
   Form,
   FormControl,
@@ -12,16 +11,13 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormHeader } from "../components/form-header";
 import { LoadingIcon } from "@/components/loading-icon";
+import { resetPasswordMutation } from "../_core/mutations";
 
 const ResetPasswordPage = () => {
-  const {
-    loading,
-    submitResetUserPasswordForm,
-    resetPasswordForm: form,
-  } = useResetPassword();
+  const { loading, resetUserPassword, form } = resetPasswordMutation();
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(submitResetUserPasswordForm)}>
+      <form onSubmit={form.handleSubmit(resetUserPassword)}>
         <FormHeader title="Reset Password" />
         <FormField
           control={form.control}
@@ -76,7 +72,7 @@ const ResetPasswordPage = () => {
           )}
         />
         <Button className="w-full mt-10" type="submit">
-          {loading ? <LoadingIcon/> : "Reset Password"}
+          {loading ? <LoadingIcon /> : "Reset Password"}
         </Button>
       </form>
     </Form>

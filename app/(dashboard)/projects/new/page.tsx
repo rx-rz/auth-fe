@@ -11,11 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ProjectApiKey } from "../_containers/project-api-key";
 import { LoadingIcon } from "@/components/loading-icon";
-import { useCreateNewProject } from "../mutations";
+import { createNewProjectMutation } from "../mutations";
 
 const NewProjectPage = () => {
-  const { loading, success, keys, form, submitCreateNewProjectForm } =
-    useCreateNewProject();
+  const { loading, success, keys, form, createNewProject } =
+    createNewProjectMutation();
 
   return (
     <div className="justify-evenly mt-10 max-w-[80%] mx-auto">
@@ -31,7 +31,7 @@ const NewProjectPage = () => {
         </div>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(submitCreateNewProjectForm)}
+            onSubmit={form.handleSubmit(createNewProject)}
             className="flex-1 max-w-xl"
           >
             <FormField

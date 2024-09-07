@@ -10,18 +10,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/store/user.store";
-import { useUpdateAdminPassword } from "../mutations";
 import { LoadingIcon } from "@/components/loading-icon";
+import { updateAdminPasswordMutation } from "../mutations";
 const UpdatePasswordPage = () => {
-  const { form, loading, submitUpdateAdminPasswordForm } =
-    useUpdateAdminPassword();
+  const { form, loading, updateAdminPassword } = updateAdminPasswordMutation();
   const { user } = useUserStore();
   return (
     <div className="">
       <h1 className="text-2xl font-bold opacity-90">Update Admin Password</h1>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(submitUpdateAdminPasswordForm)}
+          onSubmit={form.handleSubmit(updateAdminPassword)}
           className="max-w-[400px] w-[95%] mt-8 "
         >
           <FormField

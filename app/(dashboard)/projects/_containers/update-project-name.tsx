@@ -7,16 +7,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useUpdateProjectName } from "../mutations";
 import ConfirmationDialog from "@/components/confirmation-dialog";
 import { Input } from "@/components/ui/input";
+import { updateProjectNameMutation } from "../mutations";
 type Props = {
   name: string;
   projectId: string;
 };
 
 export const UpdateProjectName = ({ name, projectId }: Props) => {
-  const { form } = useUpdateProjectName();
+  const { form } = updateProjectNameMutation();
 
   return (
     <div className="w-full">
@@ -52,15 +52,14 @@ export const UpdateProjectName = ({ name, projectId }: Props) => {
 };
 
 const UpdateConfirmDialog = ({ name, projectId }: Props) => {
-  const { submitUpdateProjectNameForm, loading } = useUpdateProjectName();
+  const { updateProjectName, loading } = updateProjectNameMutation();
   return (
     <ConfirmationDialog
-      onConfirm={() => submitUpdateProjectNameForm({ name, projectId })}
+      onConfirm={() => updateProjectName({ name, projectId })}
       title="Are you sure you want to update the name of this project to"
       itemName={name}
       trigger="Update"
       triggerClassName="bg-primary rounded-md text-white font-bold p-2 text-sm"
-      cancelButtonText="No"
       confirmButtonText="Yes, Update"
       isLoading={loading}
     />
