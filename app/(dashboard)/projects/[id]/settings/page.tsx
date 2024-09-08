@@ -7,6 +7,8 @@ import { DeleteProject } from "../../_containers/delete-project";
 import { getProjectDetailsQuery } from "../../queries";
 import { useParams } from "next/navigation";
 import { RoleList } from "../../_containers/role-list";
+import { CreatePermissionDialog } from "../../_containers/create-permission-dialog";
+import { PermissionsList } from "../../_containers/permissions-list";
 
 const ProjectSettingsPage = () => {
   const { id } = useParams();

@@ -184,7 +184,11 @@ export const deleteRoleMutation = () => {
   return { loading, deleteRole };
 };
 
-export const createPermissionMutaion = () => {
+export const createAndAssignPermissionToRoleMutation = ({
+  roleId,
+}: {
+  roleId: string;
+}) => {
   const [loading, setLoading] = useState(false);
   const { showToast } = useShowToast();
 
@@ -195,8 +199,23 @@ export const createPermissionMutaion = () => {
   const createPermission = async (body: CreatePermissionDto) => {
     setLoading(true);
     const { error, response } = await createPermissionAction(body);
-    if (error) showToast({ error });
-    if (response && response.success) location.reload();
+    if (error) {
+      showToast({ error });
+    }
+    if (response && response.success) {
+      const permissionId = response.permission.id;
+      const { error, response: assignmentResponse } =
+        await assignPermissionToRoleAction({
+          permissionId,
+          roleId,
+        });
+      if (error) {
+        showToast({ error });
+      }
+      if (assignmentResponse && assignmentResponse.success) {
+        location.reload();
+      }
+    }
     setLoading(false);
   };
 

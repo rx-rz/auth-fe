@@ -19,19 +19,19 @@ export const getAdminProjectsQuery = () => {
       params: { email: user.email },
     });
   };
-  const {
-    data,
-    isLoading: projectsIsLoading,
-    error,
-  } = useSWR(user.email ? "/admin/get-projects" : null, fetcher);
-  if (error) {
-    console.log(error);
-    showToast({ error });
-  }
+  const { data, isLoading: projectsIsLoading } = useSWR(
+    user.email ? "/admin/get-projects" : null,
+    fetcher,
+    {
+      onError: (error) => {
+        showToast({ error });
+      },
+    }
+  );
   if (data) {
     projects = data.adminProjects;
   }
-  return { projects, projectsIsLoading, error };
+  return { projects, projectsIsLoading };
 };
 
 export const getProjectDetailsQuery = ({ id }: { id: string }) => {
@@ -45,16 +45,16 @@ export const getProjectDetailsQuery = ({ id }: { id: string }) => {
   const {
     data,
     isLoading: projectIsLoading,
-    error,
-  } = useSWR(id ? "/project/get-project" : null, fetcher);
-  if (error) {
-    showToast({ error });
-  }
+  } = useSWR(id ? "/project/get-project" : null, fetcher, {
+    onError: (error) => {
+      showToast({ error });
+    },
+  });
+
   if (data) {
     project = data.project;
   }
-
-  return { project, projectIsLoading, error };
+  return { project, projectIsLoading };
 };
 
 export const getProjectKeysQuery = ({
@@ -71,18 +71,20 @@ export const getProjectKeysQuery = ({
       params: { projectId: id },
     });
   };
-  const {
-    data,
-    isLoading: projectKeysIsLoading,
-    error,
-  } = useSWR(getKeys ? "/project/get-keys" : null, fetcher);
-  if (error) {
-    showToast({ error });
-  }
+  const { data, isLoading: projectKeysIsLoading } = useSWR(
+    getKeys ? "/project/get-keys" : null,
+    fetcher,
+    {
+      onError: (error) => {
+        showToast({ error });
+      },
+    }
+  );
+
   if (data) {
     projectKeys = { apiKey: data.apiKey, clientKey: data.clientKey };
   }
-  return { projectKeys, projectKeysIsLoading, error };
+  return { projectKeys, projectKeysIsLoading };
 };
 
 export const getProjectRolesQuery = ({ projectId }: { projectId: string }) => {
@@ -93,14 +95,16 @@ export const getProjectRolesQuery = ({ projectId }: { projectId: string }) => {
       params: { projectId },
     });
   };
-  const {
-    data,
-    isLoading: rolesAreLoading,
-    error,
-  } = useSWR(projectId ? "/project/get-project-roles" : null, fetcher);
-  if (error) {
-    showToast({ error });
-  }
+  const { data, isLoading: rolesAreLoading } = useSWR(
+    projectId ? "/project/get-project-roles" : null,
+    fetcher,
+    {
+      onError: (error) => {
+        showToast({ error });
+      },
+    }
+  );
+
   if (data) {
     roles = data.roles;
   }
@@ -119,15 +123,15 @@ export const getProjectPermissionsQuery = ({
       params: { projectId },
     });
   };
-  const {
-    data,
-    isLoading: permissionsAreLoading,
-    error,
-  } = useSWR(
-    projectId ? "/permissions/get-project-permissions" : null,
-    fetcher
+  const { data, isLoading: permissionsAreLoading } = useSWR(
+    projectId ? "/permission/get-project-permissions" : null,
+    fetcher,
+    {
+      onError: (error) => {
+        showToast({ error });
+      },
+    }
   );
-  if (error) showToast({ error });
   if (data) {
     permissions = data.permissions;
   }

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { PermissionsList } from "../_containers/permissions-list";
 import { EditRoleNameDialog } from "../_containers/edit-role-name-dialog";
 import { DeleteRoleDialog } from "../_containers/delete-role-dialog";
+import { CreatePermissionDialog } from "../_containers/create-permission-dialog";
 
 type Role = {
   id: string;
@@ -40,7 +41,13 @@ export const RoleListItem = ({ role }: { role: Role }) => {
         </div>
       </div>
       {showPermissions ? (
-        <PermissionsList rolePermissions={role.rolePermissions} />
+        <div className="border p-1">
+          <CreatePermissionDialog roleId={role.id} />
+          <PermissionsList
+            rolePermissions={role.rolePermissions}
+            roleId={role.id}
+          />
+        </div>
       ) : (
         <></>
       )}

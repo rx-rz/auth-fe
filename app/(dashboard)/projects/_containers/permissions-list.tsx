@@ -1,6 +1,9 @@
 import { Separator } from "@/components/ui/separator";
+import { getProjectPermissionsQuery } from "../queries";
+import { useParams } from "next/navigation";
+import { PermissionSelector } from "../_components/permission-selector";
 
-type RolePermissions = {
+type Props = {
   rolePermissions: {
     permission: {
       id: string;
@@ -10,24 +13,24 @@ type RolePermissions = {
       updatedAt: Date;
     };
   }[];
+  roleId: string;
 };
 
-export const PermissionsList = ({ rolePermissions }: RolePermissions) => {
+export const PermissionsList = ({ rolePermissions }: Props) => {
   return (
     <div className="w-full">
-      <Separator className="my-3" />
-      <p className="text-sm ">Permissions</p>
       <div className="mt-4">
         {rolePermissions.length > 0 ? (
           rolePermissions.map(({ permission }) => (
-            <a>
+            <a key={permission.id}>
               <p>{permission.name}</p>
             </a>
           ))
         ) : (
-          <p>No roles yet. Please create and assign a permission to a role.</p>
+          <></>
         )}
       </div>
+      {/* <PermissionSelector /> */}
     </div>
   );
 };
@@ -44,13 +47,5 @@ export const PermissionsListItem = ({
 }: {
   permission: Permission;
 }) => {
-  return (
-    <div>
-
-    </div>
-  );
+  return <div></div>;
 };
-
-export const CreateAndAssignPermissionDialog = () => {
-
-}
