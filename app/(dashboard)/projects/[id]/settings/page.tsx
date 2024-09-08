@@ -7,7 +7,6 @@ import { DeleteProject } from "../../_containers/delete-project";
 import { getProjectDetailsQuery } from "../../queries";
 import { useParams } from "next/navigation";
 import { RoleList } from "../../_containers/role-list";
-import { CreatePermissionDialog } from "../../_containers/create-permission-dialog";
 import { PermissionsList } from "../../_containers/permissions-list";
 
 const ProjectSettingsPage = () => {
@@ -42,6 +41,7 @@ const ProjectSettingsPage = () => {
       <TabsContent value="rbac" className="flex flex-col gap-5 mt-5">
         <RoleList projectId={project?.id ?? ""} />
         <Separator />
+        <PermissionsList projectId={project?.id ?? ""}/>
       </TabsContent>
     </Tabs>
   );

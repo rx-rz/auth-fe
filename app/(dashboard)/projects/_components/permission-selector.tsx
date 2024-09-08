@@ -9,26 +9,46 @@ import {
 } from "@/components/ui/select";
 import { useParams } from "next/navigation";
 import { getProjectPermissionsQuery } from "../queries";
-export const PermissionSelector = () => {
+import { Dispatch, SetStateAction } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+type Props = {
+  setPermissionId: Dispatch<SetStateAction<string>>;
+};
+export const PermissionSelector = ({ setPermissionId }: Props) => {
   const { id } = useParams();
-  const { permissions, permissionsAreLoading } = getProjectPermissionsQuery({
+  const { permissions } = getProjectPermissionsQuery({
     projectId: id as string,
   });
+
   return (
-    <Select>
-      <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Select a fruit" />
+    <Select
+      onValueChange={(value) => {
+        setPermissionId(value);
+      }}
+    >
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder="Select a permission" />
       </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-          <SelectItem value="blueberry">Blueberry</SelectItem>
-          <SelectItem value="grapes">Grapes</SelectItem>
-          <SelectItem value="pineapple">Pineapple</SelectItem>
-        </SelectGroup>
-      </SelectContent>
+      {permissions ? (
+        <SelectContent className="max-w-[270px]">
+          <SelectGroup>
+            <SelectLabel className="font-satoshi">
+              Available Permissions
+            </SelectLabel>
+            {permissions?.map((permission) => (
+              <SelectItem value={permission.id} className="font-satoshi">
+                <h2 className="font-bold">{permission.name}</h2>
+                <p className="font-medium text-sm opacity-80">
+                  {permission.description}
+                </p>
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      ) : (
+        <></>
+      )}
     </Select>
   );
 };

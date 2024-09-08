@@ -1,51 +1,20 @@
-import { Separator } from "@/components/ui/separator";
+import { PermissionListItem } from "../_components/permission-list-item";
 import { getProjectPermissionsQuery } from "../queries";
-import { useParams } from "next/navigation";
-import { PermissionSelector } from "../_components/permission-selector";
+import { CreatePermissionDialog } from "./create-permission-dialog";
 
-type Props = {
-  rolePermissions: {
-    permission: {
-      id: string;
-      name: string;
-      description: string | null;
-      createdAt: Date;
-      updatedAt: Date;
-    };
-  }[];
-  roleId: string;
-};
-
-export const PermissionsList = ({ rolePermissions }: Props) => {
+export const PermissionsList = ({ projectId }: { projectId: string }) => {
+  const { permissions, permissionsAreLoading } = getProjectPermissionsQuery({
+    projectId,
+  });
   return (
-    <div className="w-full">
-      <div className="mt-4">
-        {rolePermissions.length > 0 ? (
-          rolePermissions.map(({ permission }) => (
-            <a key={permission.id}>
-              <p>{permission.name}</p>
-            </a>
-          ))
-        ) : (
-          <></>
-        )}
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="font-bold">Permissions</h3>
+        <CreatePermissionDialog projectId={projectId} />
       </div>
-      {/* <PermissionSelector /> */}
+      {permissions?.map((permission) => (
+        <PermissionListItem permission={permission} />
+      ))}
     </div>
   );
-};
-
-type Permission = {
-  id: string;
-  name: string;
-  description: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
-export const PermissionsListItem = ({
-  permission,
-}: {
-  permission: Permission;
-}) => {
-  return <div></div>;
 };

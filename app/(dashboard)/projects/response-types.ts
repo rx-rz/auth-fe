@@ -87,6 +87,7 @@ export type GetProjectRolesResponse = {
         name: string;
         description: string | null;
         createdAt: Date;
+        projectId: string;
         updatedAt: Date;
       };
     }[];
@@ -141,6 +142,7 @@ export type CreatePermissionResponse = {
     id: string;
     name: string;
     description: string | null;
+    projectId: string;
     createdAt: Date;
     updatedAt: Date;
   };
@@ -149,13 +151,12 @@ export type CreatePermissionResponse = {
 export type GetProjectPermissionsResponse = {
   success: boolean;
   permissions: {
-    permission: {
-      id: string;
-      name: string;
-      description: string | null;
-      createdAt: Date;
-      updatedAt: Date;
-    };
+    id: string;
+    name: string;
+    description: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    projectId: string | null;
   }[];
 };
 
@@ -179,9 +180,18 @@ export type UpdatePermissionResponse = {
     id: string;
     name: string;
     description: string | null;
+    projectId: string;
     rolePermissions: {
       roleId: string;
     }[];
+  };
+};
+
+export type RemovePermissionFromRoleResponse = {
+  success: boolean;
+  permission: {
+    roleId: string;
+    permissionId: string;
   };
 };
 

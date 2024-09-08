@@ -16,33 +16,33 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { LoadingIcon } from "@/components/loading-icon";
-import { createPermissionMutation } from "../mutations";
-type Props = {
-  roleId: string;
-};
+import { updatePermissionMutation } from "../mutations";
+import { Permission } from "@/schemas/rbac.schemas";
+import { Edit2Icon } from "lucide-react";
 
-export const CreatePermissionDialog = ({
-  projectId,
+export const UpdatePermissionDialog = ({
+  permission,
 }: {
-  projectId: string;
+  permission: Permission;
 }) => {
-  const { form, loading, createPermission } = createPermissionMutation({
-    projectId,
+  const { form, loading, updatePermission } = updatePermissionMutation({
+    permissionId: permission.id,
   });
 
   return (
     <div className="flex justify-between items-center font-satoshi">
       <Dialog>
-        <DialogTrigger className="p-2 bg-black text-xs text-white rounded-md font-medium">
-          Create Permission
+        <DialogTrigger className="p-2 bg-black">
+          <Edit2Icon stroke="white" />
         </DialogTrigger>
-        <DialogContent className="font-satoshi">
-          <DialogTitle>Create new permission</DialogTitle>
+        <DialogContent>
+          <DialogTitle>Update permission</DialogTitle>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(createPermission)}>
+            <form onSubmit={form.handleSubmit(updatePermission)}>
               <FormField
                 control={form.control}
                 name="name"
+                defaultValue={permission.name}
                 render={({ field }) => (
                   <FormItem className="mb-4 ">
                     <FormLabel>
@@ -59,10 +59,11 @@ export const CreatePermissionDialog = ({
               <FormField
                 control={form.control}
                 name="description"
+                defaultValue={permission.description ?? ""}
                 render={({ field }) => (
                   <FormItem className="mb-4 ">
                     <FormLabel>
-                      Enter a description for the permission to be created
+                      Enter a new description for the permission
                     </FormLabel>
                     <FormControl>
                       <Textarea {...field} />
@@ -72,7 +73,7 @@ export const CreatePermissionDialog = ({
                 )}
               />
               <Button className="w-full" type="submit">
-                {loading ? <LoadingIcon /> : "Create permission"}
+                {loading ? <LoadingIcon /> : "Update permission"}
               </Button>
             </form>
           </Form>

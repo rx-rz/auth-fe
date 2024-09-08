@@ -1,5 +1,14 @@
 import { z } from "zod";
 
+export type Permission = {
+  id: string;
+  name: string;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  projectId: string | null;
+};
+
 export const CreateRoleSchema = z.object({
   name: z
     .string({ required_error: "Role name is required" })
@@ -37,7 +46,9 @@ export const CreatePermissionSchema = z.object({
   description: z.string().optional(),
 });
 
-export type CreatePermissionDto = z.infer<typeof CreatePermissionSchema>;
+export type CreatePermissionDto = z.infer<typeof CreatePermissionSchema> & {
+  projectId: string;
+};
 
 export const AssignPermissionToRoleSchema = z.object({
   permissionId: z.string({ required_error: "Permission ID is required" }),
@@ -47,6 +58,7 @@ export const AssignPermissionToRoleSchema = z.object({
 export type AssignPermissionToRoleDto = z.infer<
   typeof AssignPermissionToRoleSchema
 >;
+export type RemovePermissionFromRoleDto = AssignPermissionToRoleDto;
 
 export const PermissionIdSchema = z.object({
   permissionId: z.string({ required_error: "Permission ID is required" }),
@@ -54,9 +66,10 @@ export const PermissionIdSchema = z.object({
 export type PermissionIdDo = z.infer<typeof PermissionIdSchema>;
 
 export const UpdatePermissionSchema = z.object({
-  permissionId: z.string({ required_error: "Permission ID is required!" }),
   name: z.string().optional(),
   description: z.string().optional(),
 });
 
-export type UpdatePermissionDto = z.infer<typeof UpdatePermissionSchema>;
+export type UpdatePermissionDto = z.infer<typeof UpdatePermissionSchema> & {
+  permissionId: string;
+};

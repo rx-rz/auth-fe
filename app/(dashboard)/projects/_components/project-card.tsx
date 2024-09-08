@@ -11,6 +11,7 @@ type Props = {
     name: string;
   };
 };
+
 export const ProjectCard = ({ project }: Props) => {
   const { id, name, updatedAt } = project;
   return (

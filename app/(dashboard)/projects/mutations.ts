@@ -19,6 +19,7 @@ import {
   CreatePermissionSchema,
   CreateRoleDto,
   CreateRoleSchema,
+  RemovePermissionFromRoleDto,
   RoleNameSchema,
   UpdatePermissionDto,
   UpdatePermissionSchema,
@@ -35,6 +36,7 @@ import {
   deleteProjectAction,
   deleteRoleAction,
   getProjectKeysAction,
+  removePermissionFromRoleAction,
   updatePermissionAction,
   updateProjectNameAction,
   updateRoleNameAction,
@@ -184,10 +186,10 @@ export const deleteRoleMutation = () => {
   return { loading, deleteRole };
 };
 
-export const createAndAssignPermissionToRoleMutation = ({
-  roleId,
+export const createPermissionMutation = ({
+  projectId,
 }: {
-  roleId: string;
+  projectId: string;
 }) => {
   const [loading, setLoading] = useState(false);
   const { showToast } = useShowToast();
@@ -198,28 +200,42 @@ export const createAndAssignPermissionToRoleMutation = ({
 
   const createPermission = async (body: CreatePermissionDto) => {
     setLoading(true);
-    const { error, response } = await createPermissionAction(body);
+    const { error, response } = await createPermissionAction({
+      ...body,
+      projectId,
+    });
     if (error) {
       showToast({ error });
     }
     if (response && response.success) {
-      const permissionId = response.permission.id;
-      const { error, response: assignmentResponse } =
-        await assignPermissionToRoleAction({
-          permissionId,
-          roleId,
-        });
-      if (error) {
-        showToast({ error });
-      }
-      if (assignmentResponse && assignmentResponse.success) {
-        location.reload();
-      }
+      location.reload();
     }
     setLoading(false);
   };
 
   return { loading, form, createPermission };
+};
+
+export const removePermissionFromRoleMutation = () => {
+  const [loading, setLoading] = useState(false);
+  const { showToast } = useShowToast();
+
+  const removePermissionFromRole = async ({
+    permissionId,
+    roleId,
+  }: RemovePermissionFromRoleDto) => {
+    setLoading(false);
+    const { error, response } = await removePermissionFromRoleAction({
+      permissionId,
+      roleId,
+    });
+    if (error) showToast({ error });
+    if (response && response.success) {
+      location.reload();
+    }
+  };
+
+  return { loading, removePermissionFromRole };
 };
 
 export const updatePermissionMutation = ({
@@ -230,7 +246,7 @@ export const updatePermissionMutation = ({
   const [loading, setLoading] = useState(false);
   const { showToast } = useShowToast();
 
-  const form = useForm<{ name: string; description?: string }>({
+  const form = useForm<UpdatePermissionDto>({
     resolver: zodResolver(UpdatePermissionSchema),
   });
 
@@ -250,13 +266,18 @@ export const updatePermissionMutation = ({
 };
 
 export const assignPermissionToRoleMutation = ({
-  permissionId,
   roleId,
-}: AssignPermissionToRoleDto) => {
+}: {
+  roleId: string;
+}) => {
   const [loading, setLoading] = useState(false);
   const { showToast } = useShowToast();
 
-  const assignPermissionToRole = async () => {
+  const assignPermissionToRole = async ({
+    permissionId,
+  }: {
+    permissionId: string;
+  }) => {
     setLoading(true);
     const { error, response } = await assignPermissionToRoleAction({
       permissionId,
@@ -268,15 +289,15 @@ export const assignPermissionToRoleMutation = ({
   return { loading, assignPermissionToRole };
 };
 
-export const deletePermissionMutation = ({
-  permissionId,
-}: {
-  permissionId: string;
-}) => {
+export const deletePermissionMutation = () => {
   const [loading, setLoading] = useState(false);
   const { showToast } = useShowToast();
 
-  const deletePermission = async () => {
+  const deletePermission = async ({
+    permissionId,
+  }: {
+    permissionId: string;
+  }) => {
     setLoading(true);
     const { error, response } = await deletePermissionAction({ permissionId });
     if (error) {

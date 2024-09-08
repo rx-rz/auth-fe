@@ -1,10 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { PermissionsList } from "../_containers/permissions-list";
+import { RolePermissionsList } from "../_containers/roles-permissions-list";
 import { EditRoleNameDialog } from "../_containers/edit-role-name-dialog";
 import { DeleteRoleDialog } from "../_containers/delete-role-dialog";
-import { CreatePermissionDialog } from "../_containers/create-permission-dialog";
-
+import { AssignPermissionToRoleDialog } from "../_containers/assign-permission-to-role-dialog";
 type Role = {
   id: string;
   name: string;
@@ -32,7 +31,7 @@ export const RoleListItem = ({ role }: { role: Role }) => {
             className="text-sm p-0 bg-transparent text-black hover:bg-transparent"
             onClick={() => setShowPermissions(!showPermissions)}
           >
-            View Permissions
+            {showPermissions ? "Close" : "View Permissions"}
           </Button>
         </div>
         <div className="flex gap-2">
@@ -41,9 +40,14 @@ export const RoleListItem = ({ role }: { role: Role }) => {
         </div>
       </div>
       {showPermissions ? (
-        <div className="border p-1">
-          <CreatePermissionDialog roleId={role.id} />
-          <PermissionsList
+        <div>
+          <div className="flex h-8 justify-end gap-2">
+            <AssignPermissionToRoleDialog
+              roleId={role.id}
+              rolePermissions={role.rolePermissions}
+            />
+          </div>
+          <RolePermissionsList
             rolePermissions={role.rolePermissions}
             roleId={role.id}
           />

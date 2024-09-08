@@ -69,23 +69,37 @@ export const deleteRoleAction = ({ roleId }: RoleFormTypes.RoleIdDto) => {
   );
 };
 
-export const createPermissionAction = (body: RoleFormTypes.CreatePermissionDto) => {
+export const createPermissionAction = (
+  body: RoleFormTypes.CreatePermissionDto
+) => {
   return handleApiCall<ResponseTypes.CreatePermissionResponse>(
     api.post("/permission/create-permission", body)
   );
 };
 
-export const updatePermissionAction = (body: RoleFormTypes.UpdatePermissionDto) => {
+export const updatePermissionAction = (
+  body: RoleFormTypes.UpdatePermissionDto
+) => {
   return handleApiCall<ResponseTypes.UpdatePermissionResponse>(
-    api.put('/permission/update-permission', body)
-  )
-}
+    api.put("/permission/update-permission", body)
+  );
+};
 
 export const assignPermissionToRoleAction = (
   body: RoleFormTypes.AssignPermissionToRoleDto
 ) => {
   return handleApiCall<ResponseTypes.AssignPermissionToRoleResponse>(
     api.post("/permission/assign-permission-to-role", body)
+  );
+};
+
+export const removePermissionFromRoleAction = (
+  body: RoleFormTypes.RemovePermissionFromRoleDto
+) => {
+  return handleApiCall<ResponseTypes.RemovePermissionFromRoleResponse>(
+    api.delete("/permission/remove-permission-from-role", {
+      params: { ...body },
+    })
   );
 };
 

@@ -25,7 +25,7 @@ export const CreateRoleDialog = ({ projectId }: Props) => {
   const { form, loading, createRole } = createRoleMutation({ projectId });
   return (
     <Dialog>
-      <DialogTrigger className="bg-black px-3 py-2 text-white font-medium mt-4 rounded-md">
+      <DialogTrigger className="p-2 bg-black text-xs text-white rounded-md font-medium">
         Create Role
       </DialogTrigger>
       <DialogContent className="font-satoshi w-full max-w-[320px]">
